@@ -12,5 +12,5 @@
 const dogYears=(planet,age)=>{
     let sectoYears = age/31557600 
     let years = (plan[planet]*sectoYears)*7
-    return years.toFixed(2)
+    return (Math.round (years*100))/100
 }
