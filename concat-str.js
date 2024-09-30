@@ -1,1 +1,1 @@
-const concatStr=(arr1,arr2)=>{return arr1.concat(arr2)}
+const concatStr=(arr1,arr2)=>{return arr1+arr2}
