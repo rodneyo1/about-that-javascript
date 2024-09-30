@@ -9,8 +9,11 @@
         neptune:164.79132 
     }
 
-const dogYears=(planet,age)=>{
-    let sectoYears = age/31557600 
-    let years = (plan[planet]*sectoYears)*7
-    return (Math.round (years*100))/100
-}
+    const dogYears = (planet, age) => {
+        let sectoYears = age / 31557600;
+        let planetYears = sectoYears / plan[planet]; 
+        let dogYears = planetYears * 7; 
+        return Math.round(dogYears * 100) / 100; 
+    };
+
+console.log(dogYears("mercury", 2134835688))
