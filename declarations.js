@@ -1,19 +1,16 @@
 const escapeStr = "\`, \\, /, \"\'"
-const arr=[4,'2']
-const obj={
+const arr =Object.freeze([4,'2'])
+const obj=Object.freeze({
     str:"string",
     num:1,
     bool:true,
     undef:undefined
-}
-const nested={
+})
+const nested=Object.freeze({
     arr: [4,undefined,'2'],
     obj: {
         str:"hello",
         num:1,
         bool:true
     }
-}
-Object.freeze(arr)
-Object.freeze(nested)
-Object.freeze(obj)
+})
