@@ -7,10 +7,10 @@ const obj=Object.freeze({
     undef:undefined
 })
 const nested=Object.freeze({
-    arr: [4,undefined,'2'],
-    obj: {
+    arr: Object.freeze([4,undefined,'2']),
+    obj: Object.freeze({
         str:"hello",
         num:1,
         bool:true
-    }
+    })
 })
