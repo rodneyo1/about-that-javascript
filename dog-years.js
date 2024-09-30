@@ -9,7 +9,7 @@
         neptune:164.79132 
     }
 
-const dogyears=(planet,age)=>{
+const dogYears=(planet,age)=>{
     let sectoYears = age/31557600 
     years = (plan[planet]*sectoYears)*7
     return years.toFixed(2)
