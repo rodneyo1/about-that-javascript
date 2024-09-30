@@ -1,10 +1,6 @@
 const words=(str)=>{return str.split(" ")}
 
-const sentence=(arr)=>{
-    let result=[]
-    arr.forEach(array=>result.push(...(array.split(" "))))
-    return result
-}
+const sentence=(arr)=>{  return arr.join(" ")}
 
 const yell=(str)=>{return str.toUpperCase()}
 
@@ -14,3 +10,5 @@ const capitalize=(str)=>{str=str.toLowerCase()
     let ch=str.charAt(0).toUpperCase()
     return ch+str.slice(1)
 }
+
+console.log(sentence(['a', 'b', 'c']))
