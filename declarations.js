@@ -4,7 +4,7 @@ const obj={
     str:"string",
     num:1,
     bool:true,
-    undef:undef
+    undef:undefined
 }
 const nested={
     arr: [4,undefined,'2'],
