@@ -10,5 +10,3 @@ const capitalize=(str)=>{str=str.toLowerCase()
     let ch=str.charAt(0).toUpperCase()
     return ch+str.slice(1)
 }
-
-console.log(sentence(['a', 'b', 'c']))
