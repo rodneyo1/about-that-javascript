@@ -1,1 +1,1 @@
-const words=(str)=>{return str.split("")}
+const words=(str)=>{return str.split(" ")}
