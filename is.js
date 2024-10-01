@@ -1,5 +1,5 @@
 is.num=function num (num){return typeof(num)==="number"}
-is.nan=function nan (num){return isNaN(num)}
+is.nan=function nan (num){return Number.isNaN(num)}
 is.bool=function bool (num){return typeof(num)==="boolean"}
 is.str=function str (num){return typeof(num)==="string"}
 is.undef=function undef (num){return num===undefined}
