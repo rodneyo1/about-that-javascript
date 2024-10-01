@@ -5,7 +5,7 @@ is.str=function str (num){return typeof(num)==="string"}
 is.undef=function undef (num){return num===undefined}
 is.def=function def (num){return num!=undefined}
 is.arr=function arr (num){return Array.isArray(num)}
-is.obj=function obj (num){return typeof(num)==="object"}
+is.obj=function obj (num){return typeof(num)==="object" && !Array.isArray(num)}
 is.fun=function fun (num){return typeof(num)==="function"}
 is.truthy=function truthy (num){ 
    return num? true:false
