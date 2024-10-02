@@ -1,35 +1,58 @@
-const trunc = (num) => {
-    const strNum = String(num);
-    let decimalIndex = strNum.indexOf('.');
-    
-    if (decimalIndex === -1) {
-        return num; // No decimal point, it's already truncated.
-    }
-    
-    return parseFloat(strNum.slice(0, decimalIndex)); // Remove decimal part.
-};
+function getDecimalPart(x) {
+  return x - (x < 0 ? -1 : 1) * ~~Math.abs(x);
+}
 
-const floor = (num) => {
-    const truncated = trunc(num);
-    return num < truncated ? truncated - 1 : truncated;
-};
-
-const ceil = (num) => {
-    const truncated = trunc(num);
-    return num > truncated ? truncated + 1 : truncated;
-};
-
-const round = (num) => {
-    if (num >= 0) {
-        return floor(num + 0.5);
+function floor(x) {
+  if (x >= 0) {
+    return x - getDecimalPart(x);
+  } else {
+    const decimal = getDecimalPart(x);
+    if (decimal === 0) {
+      return x;
     } else {
-        return ceil(num - 0.5);
+      return x - (1 + decimal);
     }
-};
+  }
+}
 
-// // Test the functions
-// const nums = [3.7, -3.7, 3.1, -3.1];
-// console.log(nums.map(round));
-// console.log(nums.map(floor));
-// console.log(nums.map(trunc));
-// console.log(nums.map(ceil));
+// Custom round function using floor and getDecimalPart
+function round(x) {
+  // Check if the number is negative
+  const isNegative = x < 0;
+
+  // Use the absolute value for rounding
+  const absX = Math.abs(x);
+  const decimal = getDecimalPart(absX);
+
+  let result;
+
+  // Check if the decimal part is >= 0.5 to round up
+  if (decimal >= 0.5) {
+    result = floor(absX) + 1;
+  } else {
+    // If the decimal part is less than 0.5, just floor it
+    result = floor(absX);
+  }
+
+  // Apply the original sign back to the result
+  return isNegative ? -result : result;
+}
+
+function customCeil(x) {
+  const decimal = getDecimalPart(x);
+
+  if (decimal === 0) {
+    return x;
+  }
+
+  return floor(x) + 1;
+}
+
+function customTrunc(x) {
+    if (x >= 0) {
+        return floor(x);
+    } else {
+        return -floor(-x);
+    }
+}
+
