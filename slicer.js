@@ -8,15 +8,22 @@ function slice(arr,start,end){
         end+=n
     }
     let resultslice=[]
-    
+    let resultString=""
+
     if (start>n || end>n || start<0 || end<0 ){
         return null
     }
     for (let i = start; i < end; i++) {
+        if (Array.isArray(arr)){
         resultslice.push(arr[i])
+        } else if (typeof(arr)==="string"){
+        resultString=resultString+arr[i]
+        }
       }
-
-    return resultslice
+    if (Array.isArray(arr)){
+        return resultslice
+    }
+    return resultString
 }
 
-console.log(slice([3,2,4,5,6,4,2,4,5,4,],-78,7))
+console.log(slice([3,45,54,4,4], 2))
