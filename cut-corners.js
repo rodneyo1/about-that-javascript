@@ -1,28 +1,30 @@
-function round(num) {
-    // If the fractional part is 0.5 or more, we round up, otherwise round down
-    return num < 0 ? (num - 0.5 | 0) : (num + 0.5 | 0);
-  }
+const round = (num) => {
+    const intPart = trunc(num);
+    const fracPart = num - intPart;
+    if (num >= 0) {
+      return fracPart >= 0.5 ? intPart + 1 : intPart;
+    } else {
+      return fracPart > -0.5 ? intPart : intPart - 1;
+    }
+  };
   
-  function ceil(num) {
-    // If there is a fractional part, round up, otherwise leave the integer part
-    return num === (num | 0) ? num : (num < 0 ? num | 0 : (num | 0) + 1);
-  }
+  const ceil = (num) => {
+    const intPart = trunc(num);
+    return num > intPart ? intPart + 1 : intPart;
+  };
   
-  function floor(num) {
-    // If there is a fractional part and the number is negative, round down
-    return num === (num | 0) ? num : (num < 0 ? (num | 0) - 1 : num | 0);
-  }
+  const floor = (num) => {
+    const intPart = trunc(num);
+    return num < intPart ? intPart - 1 : intPart;
+  };
   
-  function trunc(num) {
-    // Simply remove the fractional part
-    return num | 0;
-  }
+  const trunc = (num) => {
+    return num < 0 ? -trunc(-num) : (0.5 + num) << 0;
+  };
   
-  
-//   // Example usage
-//   const nums = [3.7, -3.7, 3.1, -3.1];
-//   console.log(nums.map(round));  // Output: [4, -4, 3, -3]
-//   console.log(nums.map(floor));  // Output: [3, -4, 3, -4]
-//   console.log(nums.map(trunc));  // Output: [3, -3, 3, -3]
-//   console.log(nums.map(ceil));   // Output: [4, -3, 4, -3]
-  
+  // Test the functions
+  const nums = [3.7, -3.7, 3.1, -3.1];
+  console.log(nums.map(round));
+  console.log(nums.map(floor));
+  console.log(nums.map(trunc));
+  console.log(nums.map(ceil));
