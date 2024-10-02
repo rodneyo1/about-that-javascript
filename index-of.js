@@ -9,7 +9,7 @@ function indexOf(arr, val, ind) {
   return -1;
 }
 
-function lastindexOf(arr, val, ind) {
+function lastIndexOf(arr, val, ind) {
     ind ? ind : ind=0;
     
     for (let i = arr.length; i > ind; i--) {
