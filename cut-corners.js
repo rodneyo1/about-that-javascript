@@ -27,8 +27,6 @@ function floor(x) {
     }
 }
 
-console.log(floor(-4))
-console.log(Math.floor(-4))
 
 
 
