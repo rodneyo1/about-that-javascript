@@ -1,8 +1,8 @@
 const trunc = (num) => {
     if (num >= 0) {
-      return num - (num - parseInt(num));
+      return num - (num + 1000000) + 1000000;
     } else {
-      return -((-num) - ((-num) - parseInt(-num)));
+      return num + ((-num) + 1000000) - 1000000;
     }
   };
   
@@ -25,6 +25,7 @@ const trunc = (num) => {
       return fractional > -0.5 ? truncated : truncated - 1;
     }
   };
+  
   
 //   // Test the functions
 //   const nums = [3.7, -3.7, 3.1, -3.1];
