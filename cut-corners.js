@@ -1,30 +1,34 @@
-const round = (num) => {
-    const intPart = trunc(num);
-    const fracPart = num - intPart;
+const trunc = (num) => {
     if (num >= 0) {
-      return fracPart >= 0.5 ? intPart + 1 : intPart;
+      return num - (num - parseInt(num));
     } else {
-      return fracPart > -0.5 ? intPart : intPart - 1;
+      return -((-num) - ((-num) - parseInt(-num)));
     }
   };
   
-  const ceil = (num) => {
-    const intPart = trunc(num);
-    return num > intPart ? intPart + 1 : intPart;
-  };
-  
   const floor = (num) => {
-    const intPart = trunc(num);
-    return num < intPart ? intPart - 1 : intPart;
+    const truncated = trunc(num);
+    return num < truncated ? truncated - 1 : truncated;
   };
   
-  const trunc = (num) => {
-    return num < 0 ? -trunc(-num) : (0.5 + num) << 0;
+  const ceil = (num) => {
+    const truncated = trunc(num);
+    return num > truncated ? truncated + 1 : truncated;
+  };
+  
+  const round = (num) => {
+    const truncated = trunc(num);
+    const fractional = num - truncated;
+    if (num >= 0) {
+      return fractional >= 0.5 ? truncated + 1 : truncated;
+    } else {
+      return fractional > -0.5 ? truncated : truncated - 1;
+    }
   };
   
   // Test the functions
- // const nums = [3.7, -3.7, 3.1, -3.1];
-//   console.log(nums.map(round));
-//   console.log(nums.map(floor));
-//   console.log(nums.map(trunc));
-//   console.log(nums.map(ceil));
+  const nums = [3.7, -3.7, 3.1, -3.1];
+  console.log(nums.map(round));
+  console.log(nums.map(floor));
+  console.log(nums.map(trunc));
+  console.log(nums.map(ceil));
