@@ -1,7 +1,7 @@
 function indexOf(arr, val, ind) {
   ind ? ind : ind=0;
   
-  for (i = ind; i < arr.length; i++) {
+  for (let i = ind; i < arr.length; i++) {
     if (arr[i] == val) {
       return i;
     }
@@ -12,7 +12,7 @@ function indexOf(arr, val, ind) {
 function lastindexOf(arr, val, ind) {
     ind ? ind : ind=0;
     
-    for (i = arr.length; i > ind; i--) {
+    for (let i = arr.length; i > ind; i--) {
       if (arr[i] == val) {
         return i;
       }
@@ -22,7 +22,7 @@ function lastindexOf(arr, val, ind) {
 
   function includes(arr, val, ind) {
     ind ? ind : ind=0;
-    for (i = ind; i < arr.length; i++) {
+    for (let i = ind; i < arr.length; i++) {
       if( arr[i] == val){
         return true
       }
@@ -30,7 +30,7 @@ function lastindexOf(arr, val, ind) {
     return false
   }
 
-// console.log(includes([2, 3, 5, 8, 5, 7], 54));
+console.log(lastindexOf([2, 3, 5, 8, 5, 7], 5));
 Array.prototype.indexOf = indexOf
 Array.prototype.lastIndexOf = lastindexOf
 Array.prototype.includes = includes
