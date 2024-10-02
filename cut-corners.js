@@ -1,73 +1,49 @@
 function getDecimalPart(x) {
-    // This returns the decimal part correctly.
-    let intPart = 0;
-
-    // Calculate the integer part by subtracting until we are within 1 for positives
-    // or until we are above 0 for negatives
     if (x >= 0) {
-        while (x >= 1) {
-            x -= 1;
-            intPart += 1;
-        }
+      while (x >= 1) {
+        x -= 1;
+      }
     } else {
-        while (x < 0) {
-            x += 1;
-            intPart -= 1; // Move towards zero
-        }
+      while (x < 0) {
+        x += 1;
+      }
     }
-
-    // Return the decimal part
-    return x; // This will be the remaining decimal part
-}
-
-
-
-function floor(x) {
+    return x;
+  }
+  
+  function floor(x) {
     if (x >= 0) {
       return x - getDecimalPart(x);
     } else {
       const decimal = getDecimalPart(x);
-      return decimal === 0 ? x-1 : x - (1 + decimal);
+      return decimal === 0 ? x : x - (1 + decimal);
     }
   }
-console.log(floor(-3))
-// Custom round function using floor and getDecimalPart
-function round(x) {
-  // Check if the number is negative
-  const isNegative = x < 0;
-
-  // Use the absolute value for rounding
-  const absX = Math.abs(x);
-  const decimal = getDecimalPart(absX);
-
-  let result;
-
-  // Check if the decimal part is >= 0.5 to round up
-  if (decimal >= 0.5) {
-    result = floor(absX) + 1;
-  } else {
-    // If the decimal part is less than 0.5, just floor it
-    result = floor(absX);
+   
+  function ceil(x) {
+    const decimal = getDecimalPart(x);
+    if (decimal === 0) {
+      return x;
+    }
+    return x >= 0 ? x - decimal + 1 : x - decimal;
   }
 
-  // Apply the original sign back to the result
-  return isNegative ? -result : result;
-}
-
-function ceil(x) {
-  const decimal = getDecimalPart(x);
-
-  if (decimal === 0) {
-    return x;
+  function round(x) {
+    const isNegative = x < 0;
+    const absX = isNegative ? -x : x;
+    const decimal = getDecimalPart(absX);
+  
+    let result;
+    if (decimal >= 0.5) {
+      result = floor(absX) + 1;
+    } else {
+      result = floor(absX);
+    }
+  
+    return isNegative ? -result : result;
   }
-
-  return floor(x) + 1;
-}
-
-function trunc(x) {
-  if (x >= 0) {
-    return floor(x);
-  } else {
-    return -floor(-x);
+  
+  function trunc(x) {
+    return x >= 0 ? floor(x) : -floor(-x);
   }
-}
+  
