@@ -24,14 +24,13 @@ function getDecimalPart(x) {
 
 function floor(x) {
     if (x >= 0) {
-        return x - getDecimalPart(x);
+      return x - getDecimalPart(x);
     } else {
-        const decimal = getDecimalPart(x);
-        return decimal === 0 ? x : x - (1 + decimal); // Use intPart directly
+      const decimal = getDecimalPart(x);
+      return decimal === 0 ? x-1 : x - (1 + decimal);
     }
-}
-
-console.log(floor(0))
+  }
+console.log(floor(-3))
 // Custom round function using floor and getDecimalPart
 function round(x) {
   // Check if the number is negative
