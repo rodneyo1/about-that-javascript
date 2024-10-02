@@ -6,3 +6,7 @@ while (num > 0){
 }
 return res
 }
+
+String.prototype.repeat=repeat
+
+//console.log(String.prototype.repeat("d",5))

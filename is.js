@@ -1,3 +1,4 @@
+const is = {}
 is.num=function num (num){return typeof(num)==="number"}
 is.nan=function nan (num){return Number.isNaN(num)}
 is.bool=function bool (num){return typeof(num)==="boolean"}
@@ -13,3 +14,4 @@ is.truthy=function truthy (num){
 is.falsy=function falsy(num){
     return !num? true:false
 }
+
