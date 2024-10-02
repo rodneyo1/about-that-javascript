@@ -31,6 +31,7 @@ function lastIndexOf(arr, val, ind) {
   }
 
 console.log(lastindexOf([2, 3, 5, 8, 5, 7], 5));
+
 Array.prototype.indexOf = indexOf
-Array.prototype.lastIndexOf = lastindexOf
+Array.prototype.lastIndexOf = lastIndexOf
 Array.prototype.includes = includes
