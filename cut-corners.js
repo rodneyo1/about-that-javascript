@@ -1,5 +1,22 @@
 function getDecimalPart(x) {
-  return x - (x < 0 ? -1 : 1) * ~~Math.abs(x);
+  let intPart = 0;
+
+  // Calculate the integer part by subtracting until we are within 1 for positives
+  // or until we are above -1 for negatives
+  if (x >= 0) {
+    while (x >= 1) {
+      x -= 1;
+      intPart += 1;
+    }
+  } else {
+    while (x < 0) {
+      x += 1;
+      intPart -= 1;
+    }
+  }
+
+  // Return the decimal part
+  return x; // This will be the remaining decimal part
 }
 
 function floor(x) {
@@ -38,7 +55,7 @@ function round(x) {
   return isNegative ? -result : result;
 }
 
-function customCeil(x) {
+function ceil(x) {
   const decimal = getDecimalPart(x);
 
   if (decimal === 0) {
@@ -48,11 +65,10 @@ function customCeil(x) {
   return floor(x) + 1;
 }
 
-function customTrunc(x) {
-    if (x >= 0) {
-        return floor(x);
-    } else {
-        return -floor(-x);
-    }
+function trunc(x) {
+  if (x >= 0) {
+    return floor(x);
+  } else {
+    return -floor(-x);
+  }
 }
-
