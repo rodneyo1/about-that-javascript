@@ -1,46 +1,37 @@
 function getDecimalPart(x) {
-  let intPart = 0;
+    // This returns the decimal part correctly.
+    let intPart = 0;
 
-  // Calculate the integer part by subtracting until we are within 1 for positives
-  // or until we are above -1 for negatives
-  if (x >= 0) {
-    while (x >= 1) {
-      x -= 1;
-      intPart += 1;
+    // Calculate the integer part by subtracting until we are within 1 for positives
+    // or until we are above 0 for negatives
+    if (x >= 0) {
+        while (x >= 1) {
+            x -= 1;
+            intPart += 1;
+        }
+    } else {
+        while (x < 0) {
+            x += 1;
+            intPart -= 1; // Move towards zero
+        }
     }
-  } else {
-    while (x < 0) {
-      x += 1;
-      intPart -= 1;
-    }
-  }
 
-  // Return the decimal part
-  return x; // This will be the remaining decimal part
+    // Return the decimal part
+    return x; // This will be the remaining decimal part
 }
 
-// function floor1(x) {
-//     if (x >= 0) {
-//         return x - getDecimalPart(x);
-//     } else {
-//         return ceil(x)+1 ;
-//     }
-// }
+
+
 function floor(x) {
     if (x >= 0) {
-      return x - getDecimalPart(x);
+        return x - getDecimalPart(x);
     } else {
-      const decimal = getDecimalPart(x);
-      return decimal === 0 ? x : x - (1 + decimal);
+        const decimal = getDecimalPart(x);
+        return decimal === 0 ? x : x - (1 + decimal); // Use intPart directly
     }
-  }
+}
 
-
-
-
-
-
-
+console.log(floor(0))
 // Custom round function using floor and getDecimalPart
 function round(x) {
   // Check if the number is negative
