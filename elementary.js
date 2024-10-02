@@ -1,30 +1,47 @@
-const multiply=(a,b)=>{
-    let res=0
-    while (b > 0){
-         res+=a
-         b--
+const multiply = (a, b) => {
+    let res = 0;
+    let sign = 1;
+  
+    if ((a < 0 && b > 0) || (a > 0 && b < 0)) {
+      sign = -1;
     }
-    return res
-    
-}
-const divide=(a,b)=>{
-    //positives
-    let res=0
-    while (a-b >= 0){
-         a-=b
-         res++
+  
+    while (b > 0) {
+      res += a;
+      b--;
     }
-    return res
-    
-}
-
-const modulo=(a,b)=>{ 
-    //positives
-    let res=0
-    while (a-b >= 0){
-        a-=b
-        res++
-   }
-   return a
-   
-}
+  
+    return sign * res;
+  };
+  
+  const divide = (a, b) => {
+    let res = 0;
+    let sign = 1;
+  
+    if ((a < 0 && b > 0) || (a > 0 && b < 0)) {
+      sign = -1;
+    }
+  
+    while (a - b >= 0) {
+      a -= b;
+      res++;
+    }
+  
+    return sign * res;
+  };
+  
+  const modulo = (a, b) => {
+    let res = 0;
+    let sign = 1;
+  
+    if ((a < 0 && b > 0) || (a > 0 && b < 0)) {
+      sign = -1;
+    }
+  
+    while (a - b >= 0) {
+      a -= b;
+      res++;
+    }
+  
+    return sign * a;
+  };
