@@ -47,5 +47,5 @@ function getDecimalPart(x) {
     return x >= 0 ? floor(x) : -floor(-x);
   }
   
-  console.log(floor(-4))
-  console.log(Math.floor(-3))
+//   console.log(floor(-4))
+//   console.log(Math.floor(-3))
