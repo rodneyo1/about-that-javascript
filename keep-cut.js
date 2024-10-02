@@ -1,5 +1,5 @@
 function cutFirst(str){
-    result=""
+    let result=""
     for (let i = 2; i < str.length; i++) {
        result=result+str[i]
       }
@@ -7,7 +7,7 @@ function cutFirst(str){
 }
 
 function cutLast(str){
-    result=""
+    let result=""
     for (let i = 0; i < str.length-2; i++) {
        result=result+str[i]
       }
