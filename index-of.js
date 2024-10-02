@@ -10,9 +10,10 @@ function indexOf(arr, val, ind) {
 }
 
 function lastIndexOf(arr, val, ind) {
-    ind ? ind : ind=0;
+    let end=arr.length
+    ind ? end=ind : end=arr.length;
     
-    for (let i = arr.length; i >= ind; i--) {
+    for (let i = end; i >= 0; i--) {
       if (arr[i] == val) {
         return i;
       }
@@ -30,7 +31,8 @@ function lastIndexOf(arr, val, ind) {
     return false
   }
 
-//console.log(lastIndexOf([0, 0, "t", "t"], "t", 3));
+console.log(lastIndexOf([0, 0, "t", "t"], "t", 3));
+console.log(lastIndexOf(["t", 0, 0, "t"], "t", 2));
 
 Array.prototype.indexOf = indexOf
 Array.prototype.lastIndexOf = lastIndexOf
