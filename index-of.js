@@ -30,7 +30,7 @@ function lastIndexOf(arr, val, ind) {
     return false
   }
 
-console.log(lastindexOf([2, 3, 5, 8, 5, 7], 5));
+//console.log(lastindexOf([2, 3, 5, 8, 5, 7], 5));
 
 Array.prototype.indexOf = indexOf
 Array.prototype.lastIndexOf = lastIndexOf
