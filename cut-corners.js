@@ -31,7 +31,7 @@ function floor(x) {
       return x - getDecimalPart(x);
     } else {
       const decimal = getDecimalPart(x);
-      return decimal === 0 ? x +1: x - (1 + decimal);
+      return decimal === 0 ? x : x - (1 + decimal);
     }
   }
 
