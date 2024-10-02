@@ -19,13 +19,21 @@ function getDecimalPart(x) {
   return x; // This will be the remaining decimal part
 }
 
+// function floor1(x) {
+//     if (x >= 0) {
+//         return x - getDecimalPart(x);
+//     } else {
+//         return ceil(x)+1 ;
+//     }
+// }
 function floor(x) {
     if (x >= 0) {
-        return x - getDecimalPart(x);
+      return x - getDecimalPart(x);
     } else {
-        return ceil(x)+1 ;
+      const decimal = getDecimalPart(x);
+      return decimal === 0 ? x +1: x - (1 + decimal);
     }
-}
+  }
 
 
 
