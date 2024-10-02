@@ -20,17 +20,20 @@ function getDecimalPart(x) {
 }
 
 function floor(x) {
-  if (x >= 0) {
-    return x - getDecimalPart(x);
-  } else {
-    const decimal = getDecimalPart(x);
-    if (decimal === 0) {
-      return x;
+    if (x >= 0) {
+        return x - getDecimalPart(x);
     } else {
-      return x - (1 + decimal);
+        return ceil(x)+1 ;
     }
-  }
 }
+
+console.log(floor(-4))
+console.log(Math.floor(-4))
+
+
+
+
+
 
 // Custom round function using floor and getDecimalPart
 function round(x) {
