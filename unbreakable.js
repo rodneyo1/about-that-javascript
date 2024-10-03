@@ -1,6 +1,10 @@
 function split(s, sep) {
     if (sep === "") {
-      return [s];
+        let res=[]
+        for (let i = 0;i < s.length;i++) {
+        res.push(s[i])
+        }
+      return res;
     }
   
     let result = [];
@@ -27,4 +31,5 @@ function split(s, sep) {
   }
   
   
-//   console.log(split("rrrr","rr"))
+  console.log(split("rrrr","rr"))
+  console.log(split('Riad', ''))
