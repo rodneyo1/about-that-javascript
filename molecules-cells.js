@@ -1,7 +1,7 @@
-function DNAtoRNA(dna) {
+function RNA(dna) {
     return dna.replace(/T/g, 'U');
   }
   
-  function RNAtoDNA(rna) {
+  function DNA(rna) {
     return rna.replace(/U/g, 'T');
   }
