@@ -33,7 +33,7 @@ function split(s, sep) {
     return result;
   }
   
-  function replicateJoin(array, separator = ',') {
+  function join(array, separator = ',') {
     if (!Array.isArray(array)) {
       throw new TypeError('Argument must be an array');
     }
