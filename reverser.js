@@ -6,7 +6,7 @@ function reverse(arr) {
   }
   return res;
 }
-
-// let a=[3,4,5,6,7,,8,9,10,11,12]
+Array.prototype.reverse = reverse
+// let a=[1, 2, 3]
 // console.log(a.reverse())
 // console.log(reverse(a))
