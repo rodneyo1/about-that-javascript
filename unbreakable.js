@@ -33,6 +33,32 @@ function split(s, sep) {
     return result;
   }
   
+  function replicateJoin(array, separator = ',') {
+    if (!Array.isArray(array)) {
+      throw new TypeError('Argument must be an array');
+    }
   
-  console.log(split("rrrr","rr"))
-  console.log(split('Riad', ''))
+    if (array.length === 0) {
+      return '';
+    }
+  
+    let result = '';
+    for (let i = 0; i < array.length; i++) {
+      result += array[i];
+      if (i < array.length - 1) {
+        result += separator;
+      }
+    }
+    return result;
+  }
+  
+//   // Test cases
+//   const numbers = [1, 2, 3];
+//   const strings = ['hello', 'world'];
+//   const mixed = [1, 'hello', true];
+//   const empty = [];
+  
+//   console.log(replicateJoin(numbers)); // Output: 1,2,3
+//   console.log(replicateJoin(strings)); // Output: hello,world
+//   console.log(replicateJoin(mixed)); // Output: 1,hello,true
+//   console.log(replicateJoin(empty)); // Output: '' 
