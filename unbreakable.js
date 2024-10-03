@@ -1,4 +1,7 @@
 function split(s, sep) {
+    if (s===""){
+        return [""]
+    }
     if (sep === "") {
         let res=[]
         for (let i = 0;i < s.length;i++) {
