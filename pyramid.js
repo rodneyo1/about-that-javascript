@@ -2,7 +2,7 @@ function pyramid(char, height) {
   let result = '';
 
   for (let i = 1; i <= height; i++) {
-    const spaces = ' '.repeat((height - i) * 2); // Two spaces per level to match expected output
+    const spaces = ' '.repeat(height - i); // One space per level to center the pyramid
     const chars = char.repeat(i * 2 - 1);  // Characters increase by 2 in each row
 
     if (i > 1) {
@@ -15,4 +15,4 @@ function pyramid(char, height) {
   return result;
 }
 
-// console.log(pyramid('{}', 12));
+// console.log(pyramid('a', 5));
