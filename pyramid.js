@@ -1,18 +1,10 @@
-function pyramid(char, height) {
-  let result = '';
-
-  for (let i = 1; i <= height; i++) {
-    const spaces = ' '.repeat(height - i); // One space per level to center the pyramid
-    const chars = char.repeat(i * 2 - 1);  // Characters increase by 2 in each row
-
-    if (i > 1) {
-      result += '\n'; // Prepend newline for rows after the first one
-    }
-
-    result += spaces + chars;
+function pyramid(ch, num) {
+  let s = "";
+  let spaces = " ".repeat(ch.length);
+  for (var i = 1; i <= num; i++) {
+      s = s + spaces.repeat(num - i) + ch.repeat(2 * i - 1) + "\n";
   }
-
-  return result;
+  return s.slice(0, -1);
 }
 
-// console.log(pyramid('a', 5));
+console.log(pyramid('*', 5));
