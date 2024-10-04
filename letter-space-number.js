@@ -1,13 +1,11 @@
 function letterSpaceNumber(str) {
-    // Regular expression to match a letter followed by a space and a single-digit number not followed by any letter
-    const regex = /[a-zA-Z] \d(?![a-zA-Z])/g;
-    const matches = str.match(regex);
-
-    // Return the matches, or an empty array if there are none
-    return matches || [];
+    // Use regex to find patterns of a letter followed by a space and a single digit number
+    const pattern = /[a-zA-Z] \d(?!\d|[a-zA-Z])/g;
+    const matches = str.match(pattern);
+    return matches ? matches.filter(match => !/\d/.test(match[match.length - 1])) : [];
 }
 
-// console.log(letterSpaceNumber("m 1n 2o 345"));
-// console.log(letterSpaceNumber("a 1 b 2c 3"));
-// console.log(letterSpaceNumber("x 4y 5 z 9"));
-
+// Example usage:
+// const inputString = "He is 8 or 9 years old, not 10.";
+// const result = letterSpaceNumber(inputString);
+// console.log(result);  // Output: ['s 8', 'r 9']
