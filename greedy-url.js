@@ -1,21 +1,18 @@
+
 function getURL(dataSet) {
-    // Regular expression to match http and https URLs
-    const urlPattern = /https?:\/\/[^\s]+/g;
-    return dataSet.match(urlPattern) || [];
+  return dataSet.match(/\bhttps?:\/\/[^\s]+/g) || [];
 }
 
 function greedyQuery(dataSet) {
-    // Regular expression to match URLs with at least 3 query parameters
-    const greedyPattern = /https?:\/\/[^\s?]+\?([^&=]+=[^&=]+&){2,}[^&=]+=[^&=]+/g;
-    return dataSet.match(greedyPattern) || [];
+  return getURL(dataSet).filter(url => (url.match(/\?/g) && url.split('?')[1].split('&').length >= 3));
 }
 
 function notSoGreedy(dataSet) {
-    // Regular expression to match URLs with at least 2 but not more than 3 query parameters
-    const notSoGreedyPattern = /https?:\/\/[^\s?]+\?([^&=]+=[^&=]+&){1,2}[^&=]+=[^&=]+/g;
-    return dataSet.match(notSoGreedyPattern) || [];
+  return getURL(dataSet).filter(url => {
+    const queryParams = url.split('?')[1]?.split('&').length;
+    return queryParams >= 2 && queryParams <= 3;
+  });
 }
-
 // // Example dataSet
 // const dataSet = "qqq http:// qqqq q qqqqq https://something.com/hello qqqqqqq qhttp://example.com/hello?you=something&something=you";
 
