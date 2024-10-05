@@ -2,9 +2,9 @@ function getURL(dataSet) {
     return dataSet.match(/\bhttps?:\/\/[^\s]+/g) || [];
   }
   
-//   function greedyQuery(dataSet) {
-//     return getURL(dataSet).filter(url => (url.match(/\?/g) && url.split('?')[1].split('&').length >= 3));
-//   }
+  function greedyQuery(dataSet) {
+    return getURL(dataSet).filter(url => (url.match(/\?/g) && url.split('?')[1].split('&').length >= 3));
+  }
   
 //   function notSoGreedy(dataSet) {
 //     return getURL(dataSet).filter(url => {
