@@ -1,28 +1,24 @@
 function getURL(dataSet) {
-    return dataSet.match(/\bhttps?:\/\/[^\s]+/g) || [];
-  }
-  
-  function greedyQuery(dataSet) {
-    return getURL(dataSet).filter(url => (url.match(/\?/g) && url.split('?')[1].split('&').length >= 3));
-  }
-  
-  function notSoGreedy(dataSet) {
-    return getURL(dataSet).filter(url => {
-      const queryParams = url.split('?')[1]?.split('&').length;
-      return queryParams >= 2 && queryParams <= 3;
-    });
-  }
-  
-//   // Example dataSet:
-//   const dataSet = "qqq http:// qqqq q qqqqq https://something.com/hello qqqqqqq qhttp://example.com/hello?you=something&something=you&extra=1&another=2";
-  
-//   // Test the functions:
-//   console.log(getURL(dataSet));
-//   // Output: ['https://something.com/hello', 'http://example.com/hello?you=something&something=you&extra=1&another=2']
-  
-//   console.log(greedyQuery(dataSet));
-//   // Output: ['http://example.com/hello?you=something&something=you&extra=1&another=2']
-  
-//   console.log(notSoGreedy(dataSet));
-//   // Output: []
-  
+    // Regular expression to match http and https URLs
+    const urlPattern = /https?:\/\/[^\s]+/g;
+    return dataSet.match(urlPattern) || [];
+}
+
+function greedyQuery(dataSet) {
+    // Regular expression to match URLs with at least 3 query parameters
+    const greedyPattern = /https?:\/\/[^\s?]+\?([^&=]+=[^&=]+&){2,}[^&=]+=[^&=]+/g;
+    return dataSet.match(greedyPattern) || [];
+}
+
+function notSoGreedy(dataSet) {
+    // Regular expression to match URLs with at least 2 but not more than 3 query parameters
+    const notSoGreedyPattern = /https?:\/\/[^\s?]+\?([^&=]+=[^&=]+&){1,2}[^&=]+=[^&=]+/g;
+    return dataSet.match(notSoGreedyPattern) || [];
+}
+
+// // Example dataSet
+// const dataSet = "qqq http:// qqqq q qqqqq https://something.com/hello qqqqqqq qhttp://example.com/hello?you=something&something=you";
+
+// console.log("getURL:", getURL(dataSet));
+// console.log("greedyQuery:", greedyQuery(dataSet));
+// console.log("notSoGreedy:", notSoGreedy(dataSet));
