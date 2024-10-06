@@ -18,9 +18,9 @@ function findIP(dataSet) {
       }
     }
   
-    return result;
+    // Removing any duplicates from the result
+    return [...new Set(result)];
   }
-  
 //   // Example usage:
 //   const dataSet = "Some random text 192.168.1.1:8080 and 10.0.0.1. Invalid IP: 256.256.256.256:12345, and 172.16.254.1:65536.";
 //   console.log(findIP(dataSet));
