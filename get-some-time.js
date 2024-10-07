@@ -51,10 +51,10 @@ function firstDayWeek(weekNumber, year) {
     return formattedDate;
 }
 
-// Example usage:
-console.log(firstDayWeek(52, '1000')); // Output should be '01-01-1000'
-console.log(firstDayWeek(1, '1000')); // Output should be '08-01-1000'
-console.log(firstDayWeek(3, '1000')); // Output should be '15-01-1000'
-console.log(firstDayWeek(53, '1000')); // Output: Depending on the year structure
-console.log(firstDayWeek(1, '2023')); // Output: '02-01-2023'
-console.log(firstDayWeek(54, '2024')); // Output: 'Invalid week number'
+// // Example usage:
+// console.log(firstDayWeek(52, '1000')); // Output should be '01-01-1000'
+// console.log(firstDayWeek(1, '1000')); // Output should be '08-01-1000'
+// console.log(firstDayWeek(3, '1000')); // Output should be '15-01-1000'
+// console.log(firstDayWeek(53, '1000')); // Output: Depending on the year structure
+// console.log(firstDayWeek(1, '2023')); // Output: '02-01-2023'
+// console.log(firstDayWeek(54, '2024')); // Output: 'Invalid week number'
