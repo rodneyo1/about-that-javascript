@@ -27,12 +27,14 @@ function isBefore(date1, date2) {
 
 function isFuture(date) {
     const now = new Date();
-    return isValid(date) && date > now;
+    return isValid(date) && date.getTime() > now.getTime();
 }
 
 // // Example usage:
-// console.log(isFuture(new Date('2025-01-01'))); // Output: true
-// console.log(isFuture(new Date('2020-01-01'))); // Output: false
+// console.log(isFuture(new Date(Date.now() + 1)));
+// console.log(isFuture(new Date(Date.now() - 1)));
+// console.log(isFuture(new Date()));                 
+
 
 function isPast(date) {
     const now = new Date();
