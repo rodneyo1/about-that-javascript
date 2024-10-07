@@ -6,17 +6,14 @@ function addWeek(date) {
     const msPerDay = 24 * 60 * 60 * 1000;
     const dayDiff = Math.floor((date - epoch) / msPerDay);
     
-    // Mod the difference by 14 to fit the 14-day week cycle
     const weekDay = dayDiff % 14;
   
-    // Define the 14-day week array
     const daysOfWeek = [
       'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday',
       'secondMonday', 'secondTuesday', 'secondWednesday', 'secondThursday', 'secondFriday', 
       'secondSaturday', 'secondSunday'
     ];
-  
-    // Return the correct weekday
+
     return daysOfWeek[weekDay];
   }
   
@@ -41,4 +38,4 @@ function timeTravel({ date, hour, minute, second }) {
     second: 22
   }).toString());  // Fri May 29 2020 21:22:22
   
-  
+  console.log(new Date().toDateString())
