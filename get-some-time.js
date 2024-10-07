@@ -14,23 +14,22 @@ function firstDayWeek(weekNumber, year) {
     const startDay = firstDayOfYear.getDay(); // 0-6
     const totalDaysInYear = new Date(year, 11, 31).getDate(); // Total days in the year
 
-    // Fill the first week in the weeks array
+    // Initialize current day to fill weeks
     let currentDay = 1; // Start from the 1st day of the year
-    for (let i = startDay; i < 7; i++) {
-        if (currentDay <= totalDaysInYear) {
-            weeks[0][i] = String(currentDay).padStart(2, '0'); // Fill with the day
-            currentDay++;
-        }
-    }
 
-    // Fill the subsequent weeks
-    for (let weekIndex = 1; weekIndex < weeks.length; weekIndex++) {
+    // Fill the weeks array
+    for (let weekIndex = 0; weekIndex < weeks.length; weekIndex++) {
         for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
-            if (currentDay <= totalDaysInYear) {
-                weeks[weekIndex][dayIndex] = String(currentDay).padStart(2, '0'); // Fill with the day
-                currentDay++;
+            // Skip to the correct index for the first week
+            if (weekIndex === 0 && dayIndex < startDay) {
+                weeks[weekIndex][dayIndex] = "-"; // Fill with "-"
             } else {
-                weeks[weekIndex][dayIndex] = "-"; // Mark days that are not part of the year
+                if (currentDay <= totalDaysInYear) {
+                    weeks[weekIndex][dayIndex] = String(currentDay).padStart(2, '0'); // Fill with the day
+                    currentDay++;
+                } else {
+                    weeks[weekIndex][dayIndex] = "-"; // Mark days that are not part of the year
+                }
             }
         }
     }
@@ -39,23 +38,23 @@ function firstDayWeek(weekNumber, year) {
     const firstWeek = weeks[weekNumber - 1];
     const firstDay = firstWeek.find(day => day !== "-");
 
-    // If no valid day is found, return January 1st in the correct format
+    // If no valid day is found, return the first day of the year in the correct format
     if (!firstDay) {
         return firstDayOfYear.toLocaleDateString('en-GB'); // Format as dd-mm-yyyy
     }
 
     // Format the date as dd-mm-yyyy
     const dayOfMonth = parseInt(firstDay, 10);
-    const month = new Date(year, 0, dayOfMonth).getMonth() + 1; // Months are 0-indexed
-    const formattedDate = `${String(dayOfMonth).padStart(2, '0')}-${String(month).padStart(2, '0')}-${year}`;
+    const dateForFormatting = new Date(year, 0, dayOfMonth);
+    const formattedDate = `${String(dayOfMonth).padStart(2, '0')}-${String(dateForFormatting.getMonth() + 1).padStart(2, '0')}-${year}`;
 
     return formattedDate;
 }
 
 // Example usage:
-console.log(firstDayWeek(1, '2024')); 
-console.log(firstDayWeek(2, '2024')); 
-console.log(firstDayWeek(3, '2024')); 
-console.log(firstDayWeek(53, '2024')); 
-console.log(firstDayWeek(1, '2023')); 
+console.log(firstDayWeek(52, '1000')); // Output should be '01-01-1000'
+console.log(firstDayWeek(1, '1000')); // Output should be '08-01-1000'
+console.log(firstDayWeek(3, '1000')); // Output should be '15-01-1000'
+console.log(firstDayWeek(53, '1000')); // Output: Depending on the year structure
+console.log(firstDayWeek(1, '2023')); // Output: '02-01-2023'
 console.log(firstDayWeek(54, '2024')); // Output: 'Invalid week number'
