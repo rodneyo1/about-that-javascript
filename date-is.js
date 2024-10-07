@@ -1,10 +1,13 @@
-function isValid(date) {
+function isValid(input) {
+    // Convert to Date object if input is a number (timestamp)
+    const date = (typeof input === 'number') ? new Date(input) : input;
     return date instanceof Date && !isNaN(date);
 }
 
 // // Example usage:
 // console.log(isValid(new Date()));             // Output: true
 // console.log(isValid(new Date('invalid')));    // Output: false
+// console.log(isValid(Date.now()));              // Output: true
 
 function isAfter(date1, date2) {
     return isValid(date1) && isValid(date2) && date1 > date2;
