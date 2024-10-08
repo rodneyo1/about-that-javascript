@@ -1,60 +1,39 @@
 function firstDayWeek(weekNumber, year) {
+    // Convert year to number
+    year = parseInt(year, 10);
+
     // Ensure weekNumber is valid
     if (weekNumber < 1 || weekNumber > 53) {
         return 'Invalid week number';
     }
 
-    // Create a 2D array for the weeks of the year
-    const weeks = Array.from({ length: 53 }, () => Array(7).fill("-"));
-
-    // Create a date for January 1st of the specified year
-    const firstDayOfYear = new Date(year, 0, 1);
-    
-    // Get the day of the week for January 1st (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-    const startDay = firstDayOfYear.getDay(); // 0-6
-    const totalDaysInYear = new Date(year, 11, 31).getDate(); // Total days in the year
-
-    // Initialize current day to fill weeks
-    let currentDay = 1; // Start from the 1st day of the year
-
-    // Fill the weeks array
-    for (let weekIndex = 0; weekIndex < weeks.length; weekIndex++) {
-        for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
-            // Skip to the correct index for the first week
-            if (weekIndex === 0 && dayIndex < startDay) {
-                weeks[weekIndex][dayIndex] = "-"; // Fill with "-"
-            } else {
-                if (currentDay <= totalDaysInYear) {
-                    weeks[weekIndex][dayIndex] = String(currentDay).padStart(2, '0'); // Fill with the day
-                    currentDay++;
-                } else {
-                    weeks[weekIndex][dayIndex] = "-"; // Mark days that are not part of the year
-                }
-            }
-        }
+    // Find the first Thursday of the year
+    let firstThursday = new Date(year, 0, 1);
+    while (firstThursday.getDay() !== 4) {
+        firstThursday.setDate(firstThursday.getDate() + 1);
     }
 
-    // Find the first day of the specified week (weekNumber - 1)
-    const firstWeek = weeks[weekNumber - 1];
-    const firstDay = firstWeek.find(day => day !== "-");
+    // Calculate the date of the Monday of week 1
+    let weekOne = new Date(firstThursday);
+    weekOne.setDate(firstThursday.getDate() - 3);
 
-    // If no valid day is found, return the first day of the year in the correct format
-    if (!firstDay) {
-        return firstDayOfYear.toLocaleDateString('en-GB'); // Format as dd-mm-yyyy
+    // Calculate the date of the Monday of the requested week
+    let targetDate = new Date(weekOne);
+    targetDate.setDate(weekOne.getDate() + (weekNumber - 1) * 7);
+
+    // If the target date is before January 1st, return January 1st
+    if (targetDate.getFullYear() < year) {
+        targetDate = new Date(year, 0, 1);
     }
 
     // Format the date as dd-mm-yyyy
-    const dayOfMonth = parseInt(firstDay, 10);
-    const dateForFormatting = new Date(year, 0, dayOfMonth);
-    const formattedDate = `${String(dayOfMonth).padStart(2, '0')}-${String(dateForFormatting.getMonth() + 1).padStart(2, '0')}-${year}`;
-
-    return formattedDate;
+    const day = String(targetDate.getDate()).padStart(2, '0');
+    const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+    return `${day}-${month}-${year}`;
 }
-
-// // Example usage:
-// console.log(firstDayWeek(52, '1000')); // Output should be '01-01-1000'
-// console.log(firstDayWeek(1, '1000')); // Output should be '08-01-1000'
-// console.log(firstDayWeek(3, '1000')); // Output should be '15-01-1000'
-// console.log(firstDayWeek(53, '1000')); // Output: Depending on the year structure
-// console.log(firstDayWeek(1, '2023')); // Output: '02-01-2023'
-// console.log(firstDayWeek(54, '2024')); // Output: 'Invalid week number'
+console.log(firstDayWeek(52, '1000')); // Should output '22-12-1000'
+console.log(firstDayWeek(1, '1000')); // Should output '01-01-1000'
+console.log(firstDayWeek(2, '1000')); // Should output '08-01-1000'
+console.log(firstDayWeek(3, '1000')); // Should output '15-01-1000'
+console.log(firstDayWeek(1, '2023')); // Should output '02-01-2023'
+console.log(firstDayWeek(54, '2024')); // Should output 'Invalid week number'
