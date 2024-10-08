@@ -74,9 +74,12 @@ console.log(trimTemp([
 function tempForecasts(objarr){
     return objarr.map(obj=>{
        let {city,temperature,state,region}=obj
-        const convert=(temperature){
-            
+        const convert=(temp)=>{
+            const fahrenheit = parseFloat(temp.replace('°F', ''));
+            const celsius = Math.floor((fahrenheit - 32) * 5 / 9);
+            return `${celsius}°Celcius`;
         }
+        temperature=convert(temperature)
         state=capitalizeEachWord(state)
         return `${temperature} in ${city}, ${state}`
     })
