@@ -1,8 +1,9 @@
-function adder(numbers) {
-    return numbers.reduce((sum, num) => sum + num, 0) 
+function adder(numbers ,init=0) {
+    return init + numbers.reduce((sum, num) => sum + num, 0) 
 }
 
 console.log(adder([1, 2, 3, 4]))
+console.log((adder([9, 24, 7, 11, 3], 10)))
 
 function sumOrMul(numbers, initialValue = 0) {
     return numbers.reduce((acc, num) => {
