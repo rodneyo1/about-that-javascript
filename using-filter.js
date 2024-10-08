@@ -9,17 +9,20 @@ function filterStartVowel(stringsarray){
 
 //console.log(filterStartVowel(["apple","goat","uodf"]))
 
-function filter5Vowels(stringsarray){
-    return stringsarray.filter(str=>function containsAllCharacters(str) {
-        for (let char of "aeiou") {
-            if (!str.includes(char)) {
-                return false;
+function filter5Vowels(stringsArray) {
+    return stringsArray.filter(str => {
+        let vowelCount = 0;
+        for (let char of str.toLowerCase()) {
+            if ("aeiou".includes(char)) {
+                vowelCount += 1;
             }
         }
-        return true;
-    }(str))
+        return vowelCount >= 5;
+    });
 }
-//console.log(filter5Vowels(["a,i,e,o,u","rt","a,e"]))
+
+//console.log(filter5Vowels(["a,i,i,o,u,i", "rt", "afdaaogdgeu", "a,e,i,o,u,a"])); 
+
 
 function filter1DistinctVowel(arr) {
     return arr.filter(word => {
