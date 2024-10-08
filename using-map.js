@@ -73,7 +73,7 @@ console.log(trimTemp([
 //Temp Forecasts
 function tempForecasts(objarr){
     return objarr.map(obj=>{
-        (city,temperature,state,region)=obj
+       let {city,temperature,state,region}=obj
         // temperature=gf
         // state=
         return `${temperature} in ${city}, ${state}`
