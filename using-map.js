@@ -3,7 +3,7 @@ const citiesOnly = (arr) => arr.map(obj => obj.city);
 
 // Upper Casing States
 const upperCasingStates = (arr) => arr.map(state => 
-  state.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+  state.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
 );
 
 // Fahrenheit to Celsius
@@ -22,6 +22,6 @@ const trimTemp = (arr) => arr.map(obj => ({
 // Temp Forecasts
 const tempForecasts = (arr) => arr.map(obj => {
   const celsius = Math.floor((parseInt(obj.temperature) - 32) * 5 / 9);
-  const cityState = `${obj.city}, ${obj.state.charAt(0).toUpperCase() + obj.state.slice(1)}`;
-  return `${celsius}°Celsius in ${cityState}`;
+  const formattedState = upperCasingStates([obj.state])[0];
+  return `${celsius}°Celsius in ${obj.city}, ${formattedState}`;
 });
