@@ -74,8 +74,10 @@ console.log(trimTemp([
 function tempForecasts(objarr){
     return objarr.map(obj=>{
        let {city,temperature,state,region}=obj
-        // temperature=gf
-        // state=
+        const convert=(temperature){
+            
+        }
+        state=capitalizeEachWord(state)
         return `${temperature} in ${city}, ${state}`
     })
 
