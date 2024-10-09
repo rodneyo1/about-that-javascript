@@ -1,5 +1,5 @@
 //.every
-const LongWords=(arr)=>{
+const longWords=(arr)=>{
    return arr.every(str=>typeof(str)=="string" && str.length>=5)
 }
 
