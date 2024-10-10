@@ -1,5 +1,5 @@
 function hasCity(country, cities) {
-    // return function(city) {
+    return function(city) {
         if (cities.includes(city)) {
             return `${city} is a city from ${country}`;
         } else {
