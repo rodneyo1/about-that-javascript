@@ -6,7 +6,7 @@ function flow(functions) {
             result = functions[i](result);
         }
         
-        return result;
+        // return result;
     };
 }
 
