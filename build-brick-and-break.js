@@ -36,8 +36,9 @@ export function repair(...ids) {
 }
 
 export function destroy() {
-  const lastBrick = document.querySelector('.brick:last-child');
-  if (lastBrick) {
+  const bricks = document.querySelectorAll('.brick');
+  if (bricks.length > 0) {
+    const lastBrick = bricks[bricks.length - 1];
     lastBrick.remove();
     brickCount--;
   }
