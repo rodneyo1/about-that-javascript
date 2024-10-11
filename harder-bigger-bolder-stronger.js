@@ -6,7 +6,7 @@ export const generateLetters = () => {
   // Clear any existing content in the container
   container.innerHTML = '';
 
-  for (let i = 0; i < 120; i++) {
+  for (let i = 0; i < 119; i++) {
     const letterDiv = document.createElement('div'); // Create a new div for each letter
     const randomLetter = String.fromCharCode(Math.floor(Math.random() * 26) + 65); // Generate a random uppercase letter
 
