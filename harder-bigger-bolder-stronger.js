@@ -1,9 +1,9 @@
-// harder-bigger-bolder-stronger.js
+// Create a container for the letters
+const container = document.createElement('div');
+document.body.appendChild(container); // Append the container to the body
+
 export const generateLetters = () => {
-  // Create a container for the letters
-  const container = document.createElement('div');
-  
-  // Clear any existing content in the container (optional)
+  // Clear any existing content in the container
   container.innerHTML = '';
 
   for (let i = 0; i < 120; i++) {
@@ -13,7 +13,7 @@ export const generateLetters = () => {
     // Calculate font-size and font-weight based on the index
     const fontSize = 11 + (i * (130 - 11) / 119); // Linearly interpolate font-size from 11 to 130
     let fontWeight;
-    
+
     if (i < 40) {
       fontWeight = 300; // First third
     } else if (i < 80) {
@@ -31,6 +31,4 @@ export const generateLetters = () => {
 
     container.appendChild(letterDiv); // Append the letter div to the container
   }
-
-  document.body.appendChild(container); // Append the container to the body
 };
