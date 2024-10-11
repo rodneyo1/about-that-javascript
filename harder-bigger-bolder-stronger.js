@@ -30,5 +30,6 @@ export const generateLetters = () => {
     letterDiv.textContent = randomLetter; // Set the text content to the random letter
 
     container.appendChild(letterDiv); // Append the letter div to the container
+    //console.log(`Number of letter divs created: ${container.children.length}`); 
   }
 };
