@@ -22,7 +22,7 @@ export const generateColdShades = () => {
   }
 };
 
-// export const choseShade = (color) => {
-//   const alldivs = [...document.querySelectorAll("div")];
-//   alldivs.map((div) => (div.className = color));
-// };
+export const choseShade = (color) => {
+  const alldivs = [...document.querySelectorAll("div")];
+  alldivs.map((div) => (div.className = color));
+};
