@@ -6,7 +6,12 @@ export const generateClasses = () => {
     style.innerHTML += `.${color} {\n   background: ${color};\n}\n`;
   }
   document.querySelector("head").append(style);
-};
+}
+
+export const choseShade = (color) => {
+  const alldivs = [...document.querySelectorAll("div")];
+  alldivs.map((div) => (div.className = color));
+}
 
 export const generateColdShades = () => {
   const cold = ["aqua", "blue", "turquoise", "green", "cyan", "navy", "purple"];
@@ -22,7 +27,4 @@ export const generateColdShades = () => {
   }
 };
 
-export const choseShade = (color) => {
-  const alldivs = [...document.querySelectorAll("div")];
-  alldivs.map((div) => (div.className = color));
-};
+
