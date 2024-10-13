@@ -38,10 +38,10 @@ export const pick = () => {
     })
 
     document.addEventListener('mousemove', function(e) {
-        // lineX.setAttribute("y1", "0")
-        // lineX.setAttribute("y2", window.innerHeight)
-        // lineX.setAttribute("x1", e.clientX)
-        // lineX.setAttribute("x2", e.clientX)
+        lineX.setAttribute("y1", "0")
+        lineX.setAttribute("y2", window.innerHeight)
+        lineX.setAttribute("x1", e.clientX)
+        lineX.setAttribute("x2", e.clientX)
         // lineY.setAttribute("y1", e.clientY)
         // lineY.setAttribute("y2", e.clientY)
         // lineY.setAttribute("x1", "0")
