@@ -1,4 +1,4 @@
-import { gossips } from './data.js'
+import { gossips } from "./gossip-grid.data.js";
 export function grid() {
     let allChange = document.createElement('div')
     allChange.className = 'ranges'
