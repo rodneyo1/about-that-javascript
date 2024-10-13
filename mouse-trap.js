@@ -20,11 +20,11 @@ export function moveCircle() {
         let size = boxMid.getBoundingClientRect()
 
 
-        if (finalCircle.getAttribute('class') !== 'box') {
-            if ((+finalCircle.style.left.replace('px', '') > (size.x)) && (+finalCircle.style.left.replace('px', '') < (size.right - 50)) && (+finalCircle.style.top.replace('px', '') > (size.top)) && (+finalCircle.style.top.replace('px', '') < (size.bottom - 50))) {
-                finalCircle.style.background = 'var(--purple)'
-            }
-        }
+        // if (finalCircle.getAttribute('class') !== 'box') {
+        //     if ((+finalCircle.style.left.replace('px', '') > (size.x)) && (+finalCircle.style.left.replace('px', '') < (size.right - 50)) && (+finalCircle.style.top.replace('px', '') > (size.top)) && (+finalCircle.style.top.replace('px', '') < (size.bottom - 50))) {
+        //         finalCircle.style.background = 'var(--purple)'
+        //     }
+        // }
 
         if (event.clientX - 25 < (size.x) && finalCircle.style.background === 'var(--purple)') {
             console.log(finalCircle.style.left)
@@ -63,8 +63,8 @@ export function moveCircle() {
 
 }
 
-// export function setBox() {
-//     const boxMid = document.createElement('div')
-//     boxMid.setAttribute('class', 'box')
-//     document.body.append(boxMid)
-// }
+export function setBox() {
+    const boxMid = document.createElement('div')
+    boxMid.setAttribute('class', 'box')
+    document.body.append(boxMid)
+}
