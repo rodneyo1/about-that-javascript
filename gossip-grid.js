@@ -4,12 +4,13 @@ export function grid() {
   let allChange = document.createElement("div");
   allChange.className = "ranges";
   let inputWidth = document.createElement("input");
-  
+
+  inputWidth.value = "";
+  inputWidth.min = "200"; 
   inputWidth.className = "range";
   inputWidth.id = "inputWidth";
   inputWidth.type = "range";
-  inputWidth.value = "";
-  inputWidth.min = "200";
+ 
   inputWidth.max = "800";
   inputWidth.addEventListener("input", function () {
     let gos = document.querySelectorAll(".gossip");
@@ -19,12 +20,14 @@ export function grid() {
   });
 
   let fontSize = document.createElement("input");
-  fontSize.className = "range";
-  fontSize.id = "fontSize";
-  fontSize.type = "range";
+
   fontSize.min = "20";
   fontSize.max = "40";
   fontSize.value = "";
+  fontSize.className = "range";
+  fontSize.id = "fontSize";
+  fontSize.type = "range";
+  
   fontSize.addEventListener("input", function () {
     let gos = document.querySelectorAll(".gossip");
     gos.forEach((e) => {
@@ -33,12 +36,13 @@ export function grid() {
   });
 
   let background = document.createElement("input");
-  background.className = "range";
-  background.id = "background";
   background.type = "range";
   background.min = "20";
+  background.className = "range";
+  background.id = "background";
   background.max = "75";
   background.value = "";
+
   background.addEventListener("input", function () {
     let gos = document.querySelectorAll(".gossip");
     gos.forEach((e) => {
