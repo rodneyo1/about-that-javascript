@@ -72,11 +72,11 @@ export function grid() {
   });
   addGross(gossips);
 }
-// function addGross(goss) {
-//     goss.forEach(elem => {
-//         let goss = document.createElement('div')
-//         goss.className = "gossip"
-//         goss.innerHTML = elem
-//         document.body.appendChild(goss)
-//     })
-// }
+function addGross(goss) {
+    goss.forEach(elem => {
+        let goss = document.createElement('div')
+        goss.className = "gossip"
+        goss.innerHTML = elem
+        document.body.appendChild(goss)
+    })
+}
