@@ -3,17 +3,18 @@ import { gossips } from "./gossip-grid.data.js";
 export function grid() {
   let allChange = document.createElement("div");
   allChange.className = "ranges";
-  let width = document.createElement("input");
-  width.className = "range";
-  width.id = "width";
-  width.type = "range";
-  width.value = "";
-  width.min = "200";
-  width.max = "800";
-  width.addEventListener("input", function () {
+  let inputWidth = document.createElement("input");
+  
+  inputWidth.className = "range";
+  inputWidth.id = "inputWidth";
+  inputWidth.type = "range";
+  inputWidth.value = "";
+  inputWidth.min = "200";
+  inputWidth.max = "800";
+  inputWidth.addEventListener("input", function () {
     let gos = document.querySelectorAll(".gossip");
     gos.forEach((e) => {
-      e.style.width = width.value + "px";
+      e.style.inputWidth = inputWidth.value + "px";
     });
   });
 
@@ -46,7 +47,7 @@ export function grid() {
     console.log(background.value);
   });
 
-  allChange.appendChild(width);
+  allChange.appendChild(inputWidth);
   allChange.appendChild(fontSize);
   allChange.appendChild(background);
   document.body.appendChild(allChange);
