@@ -9,8 +9,10 @@ function filterKeys(obj, predicate) {
   }
   
   // reduceKeys function - reduces the keys based on the provided reducer function
-  function reduceKeys(obj, reducer, initialValue) {
-    return Object.keys(obj).reduce(reducer, initialValue);
+  function reduceKeys(obj, reducer, initialValue = '') {
+    return Object.keys(obj).reduce((acc, key) => {
+      return reducer(acc, key);
+    }, initialValue);
   }
   
 //   const nutrients = { carbohydrates: 12, protein: 20, fat: 5 };
