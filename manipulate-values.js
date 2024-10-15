@@ -10,44 +10,36 @@
 //     orange:  { calories: 49,  protein: 0.9,   carbs: 13,    sugar: 9,   fiber: 0.2, fat: 0.1   },
 //   }
 
-// Function to filter object values
+// Function to filter the values of an object based on a condition
 function filterValues(obj, callback) {
-    const result = {};
-    for (let key in obj) {
-      if (callback(obj[key])) {
-        result[key] = obj[key];
-      }
-    }
-    return result;
-  }
-  
-  // Function to map object values
-  function mapValues(obj, callback) {
-    const result = {};
-    for (let key in obj) {
-      result[key] = callback(obj[key]);
-    }
-    return result;
-  }
-  
-  // Function to reduce object values
-  function reduceValues(obj, callback, initialValue) {
-    let accumulator = initialValue;
-    for (let key in obj) {
-      accumulator = callback(accumulator, obj[key]);
-    }
-    return accumulator;
-  }
-  
-//   // Example usage
-//   const nutrients = { carbohydrates: 12, protein: 20, fat: 5 };
-  
-//   console.log(filterValues(nutrients, (nutrient) => nutrient <= 12));
-//   // Output: { carbohydrates: 12, fat: 5 }
-  
-//   console.log(mapValues(nutrients, (v) => v + 1));
-//   // Output: { carbohydrates: 13, protein: 21, fat: 6 }
-  
-//   console.log(reduceValues(nutrients, (acc, cr) => acc + cr, 0));
-//   // Output: 37
-  
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key, value]) => callback(value))
+  );
+}
+
+// Function to map each value of an object to a new value based on a callback
+function mapValues(obj, callback) {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [key, callback(value)])
+  );
+}
+
+// Function to reduce the values of an object into a single output
+function reduceValues(obj, callback, initialValue) {
+  return Object.values(obj).reduce(callback, initialValue);
+}
+
+// // Testing the functions with the example provided
+// const nutrients = { carbohydrates: 12, protein: 20, fat: 5 };
+
+// // Example usage of filterValues
+// console.log(filterValues(nutrients, (nutrient) => nutrient <= 12));
+// // Output: { carbohydrates: 12, fat: 5 }
+
+// // Example usage of mapValues
+// console.log(mapValues(nutrients, (v) => v + 1));
+// // Output: { carbohydrates: 13, protein: 21, fat: 6 }
+
+// // Example usage of reduceValues
+// console.log(reduceValues(nutrients, (acc, cr) => acc + cr, 0));
+// // Output: 37
