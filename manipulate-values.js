@@ -25,7 +25,7 @@ function mapValues(obj, callback) {
 }
 
 // Function to reduce the values of an object into a single output
-function reduceValues(obj, callback, initialValue) {
+function reduceValues(obj, callback, initialValue = 0) {
   return Object.values(obj).reduce(callback, initialValue);
 }
 
