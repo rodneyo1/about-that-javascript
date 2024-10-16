@@ -1,5 +1,3 @@
-"use strict";
-
 function replica(target, ...objs) {
     for (const obj of objs) {
         const newObj = new Object;
@@ -7,20 +5,18 @@ function replica(target, ...objs) {
 
         for (const [key, value] of Object.entries(obj)) {
             // Handle RegExp objects by creating a new instance of RegExp
-            if (value instanceof RegExp) {
+            if (value.constructor === RegExp) {
                 newObj[key] = new RegExp(value);
                 continue;
             }
 
-            // Handle other objects deeply (except arrays, handled later)
+            // If the value is an object (but not an array), deep copy it
             if (typeof value === "object" && value !== null && !Array.isArray(value)) {
-                newObj[key] = replica(target[key] || {}, value);
-            } else if (Array.isArray(value)) {
-                // Deep copy arrays
-                newObj[key] = value.map(item => (typeof item === 'object' && item !== null) ? replica({}, item) : item);
-            } else {
-                // Directly assign primitives or non-object types
-                newObj[key] = value;
+                // Overwrite primitive values or initialize undefined target key with an empty object
+                if (typeof target[key] !== "object" || target[key] === null || Array.isArray(target[key])) {
+                    target[key] = {};
+                }
+                Object.assign(newObj[key], replica(target[key], value));
             }
         }
 
@@ -29,9 +25,9 @@ function replica(target, ...objs) {
     return target;
 }
 
-// Example usage for the failing test:
-const result = replica({ con: console.log }, { reg: /hello/ });
-console.log(result);
+// // Example usage for the failing tests:
+// console.log(replica({ con: console.log }, { reg: /hello/ }));
+// // Expected output: { con: [Function: log], reg: /hello/ }
 
-// Expected output:
-// { con: [Function: log], reg: /hello/ }
+// console.log(replica({ a: 4 }, { a: { b: 1 } }).a.b);
+// // Expected output: 1
