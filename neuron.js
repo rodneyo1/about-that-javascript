@@ -1,4 +1,6 @@
 const neuron = (inputs) => {
+    if (inputs.length === 0) return {};
+  
     const result = {
       questions: {},
       orders: {}
@@ -32,6 +34,10 @@ const neuron = (inputs) => {
       }
     });
   
+    // Remove empty categories
+    if (Object.keys(result.questions).length === 0) delete result.questions;
+    if (Object.keys(result.orders).length === 0) delete result.orders;
+  
     return result;
   };
   
@@ -45,3 +51,4 @@ const neuron = (inputs) => {
 //   ];
   
 //   console.log(JSON.stringify(neuron(exampleInput), null, 2));
+//   console.log(JSON.stringify(neuron([]), null, 2));
