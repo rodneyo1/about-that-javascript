@@ -10,11 +10,21 @@ const filterKeys = (obj, fn) => {
     );
   };
   
-  const reduceKeys = (obj, fn, initialValue = '') => {
-    return Object.keys(obj).reduce((acc, key, index) => {
-      return index === 0 ? key : fn(acc, key);
-    }, initialValue);
-  };
+  function reduceKeys(nutrients, f, acc = undefined) {
+    let reduced = acc? acc : Object.entries(nutrients)[0][0]
+    if (acc === 0) reduced = 0
+    if (acc) {
+        for (const [key] of Object.entries(nutrients)) 
+        {
+        reduced = f(reduced, key, acc)
+        } 
+    } else {
+        for (let i = 1; i < Object.entries(nutrients).length; i++) {
+            reduced = f(reduced, Object.entries(nutrients)[i][0])
+        }
+    }
+    return reduced
+}
   
 //   // Example usage:
 //   const nutrients = { carbohydrates: 12, protein: 20, fat: 5 };
