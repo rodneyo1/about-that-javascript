@@ -1,21 +1,18 @@
-function deepCopy(value) {
-    // Check if value is an array
-    if (Array.isArray(value)) {
-        return value.map(item => deepCopy(item)); // Recursively copy each item
+function deepCopy(elem) {
+    if (Array.isArray(elem)) {
+      let newArr = new Array;
+      for (const value of elem) {
+        Array.isArray(value)? newArr.push(deepCopy(value)): newArr.push(value);
+      }
+      return newArr;
+    } else {
+      let newObj = new Object;
+      for (const [key, value] of Object.entries(elem)) {
+        newObj[key] = typeof value === "object"? deepCopy(elem[key]): value;
+      }
+      return newObj;
     }
-    
-    // Check if value is an object
-    if (value !== null && typeof value === 'object') {
-        const newObj = {};
-        for (const [key, val] of Object.entries(value)) {
-            newObj[key] = deepCopy(val); // Recursively copy each property
-        }
-        return newObj;
-    }
-    
-    // If it's neither an array nor an object, return the value directly
-    return value;
-}
+  }
 // // Example usage:
 // const original = {
 //     name: 'apple',
