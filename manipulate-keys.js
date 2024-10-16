@@ -10,8 +10,10 @@ const filterKeys = (obj, fn) => {
     );
   };
   
-  const reduceKeys = (obj, fn, initialValue) => {
-    return Object.keys(obj).reduce(fn, initialValue);
+  const reduceKeys = (obj, fn, initialValue = '') => {
+    return Object.keys(obj).reduce((acc, key, index) => {
+      return index === 0 ? key : fn(acc, key);
+    }, initialValue);
   };
   
 //   // Example usage:
