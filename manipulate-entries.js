@@ -17,9 +17,9 @@ const filterEntries = (obj, fn) => {
   
   // Additional functions using the above
   const totalCalories = (cart) => {
-    return reduceEntries(cart, (total, [item, grams]) => {
+    return +(reduceEntries(cart, (total, [item, grams]) => {
       return total + (nutritionDB[item].calories * grams / 100);
-    }, 0);
+    }, 0)).toFixed(1);
   };
   
   const lowCarbs = (cart) => {
