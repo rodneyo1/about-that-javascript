@@ -1,23 +1,29 @@
 "use strict";
 
 function pronoun(str) {
-    const pronouns = ['i', 'you', 'he', 'she', 'it', 'they', 'we'];
+    const regexPronoun = /\b(i|you|he|she|it|they|we)\b/gi;  // Match pronouns
+    const pronounMatch = str.match(regexPronoun)?.map(x => x.toLowerCase());  // Convert pronouns to lowercase
+
+    const words = str.split(/\s+/);  // Split the string into words, keeping punctuation
+
     const result = {};
-    
-    const words = str.toLowerCase().split(/\s+/);  // Split the string into words, ignoring case
+    const pronouns = ["i", "you", "he", "she", "it", "they", "we"];
+
     for (let i = 0; i < words.length; i++) {
-        const word = words[i];
+        const word = words[i].replace(/[^\w]/g, '').toLowerCase();  // Remove punctuation and lowercase
         if (pronouns.includes(word)) {
             // Initialize the pronoun key in the result object if it doesn't exist
             if (!result[word]) {
                 result[word] = { word: [], count: 0 };
             }
-
             result[word].count++;  // Increment the count for the pronoun
 
-            // Add the word after the pronoun if it exists and is not another pronoun
-            if (i + 1 < words.length && !pronouns.includes(words[i + 1])) {
-                result[word].word.push(words[i + 1]);
+            // Add the word after the pronoun if it exists, is not another pronoun, and does not contain punctuation
+            if (i + 1 < words.length) {
+                const nextWord = words[i + 1].replace(/[^\w]/g, '');  // Remove punctuation from the next word
+                if (!pronouns.includes(nextWord.toLowerCase()) && nextWord !== "") {
+                    result[word].word.push(nextWord);
+                }
             }
         }
     }
@@ -26,10 +32,6 @@ function pronoun(str) {
 }
 
 // // Example usage:
-// const ex1 = 'Using Array Destructuring, you you can iterate through objects easily.';
-// console.log(pronoun(ex1));
-// // Output: { you: { word: [ 'can' ], count: 2 } }
-
-// const ex2 = 'If he you want to buy something you have to pay.';
-// console.log(pronoun(ex2));
-// // Output: { he: { word: [], count: 1 }, you: { word: [ 'want', 'have' ], count: 2 } }
+// const ex = 'I buy,\ni to,\nYOU buy,\nit have,\nIt buys,\nit is,\nyou go';
+// console.log(pronoun(ex));
+// // Output: { i: { word: ['buy', 'to'], count: 2 }, you: { word: ['buy', 'go'], count: 2 }, it: { word: ['have', 'buys', 'is'], count: 3 } }
