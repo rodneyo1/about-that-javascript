@@ -1,29 +1,37 @@
-function replica(target, ...sources) {
-    sources.forEach(source => {
-        if (source && typeof source === 'object') {
-            for (const [key, value] of Object.entries(source)) {
-                if (Array.isArray(value)) {
-                    // If value is an array, deep copy the array
-                    target[key] = Array.isArray(target[key]) ? target[key] : [];
-                    target[key] = replica([], value);
-                } else if (value !== null && typeof value === 'object') {
-                    // If value is an object, deep copy the object
-                    target[key] = typeof target[key] === 'object' ? target[key] : {};
-                    target[key] = replica(target[key], value);
-                } else {
-                    // Otherwise, assign the value directly (primitives)
-                    target[key] = value;
-                }
+"use strict";
+
+function replica(target, ...objs) {
+    for (const obj of objs) {
+        const newObj = new Object;
+        Object.assign(newObj, obj);
+
+        for (const [key, value] of Object.entries(obj)) {
+            // Handle RegExp objects by creating a new instance of RegExp
+            if (value instanceof RegExp) {
+                newObj[key] = new RegExp(value);
+                continue;
+            }
+
+            // Handle other objects deeply (except arrays, handled later)
+            if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+                newObj[key] = replica(target[key] || {}, value);
+            } else if (Array.isArray(value)) {
+                // Deep copy arrays
+                newObj[key] = value.map(item => (typeof item === 'object' && item !== null) ? replica({}, item) : item);
+            } else {
+                // Directly assign primitives or non-object types
+                newObj[key] = value;
             }
         }
-    });
+
+        Object.assign(target, newObj);
+    }
     return target;
 }
 
-// // Example usage:
-// const target = { a: 1, b: { x: 10, y: 20 } };
-// const source1 = { b: { x: 100, z: 300 }, c: [1, 2, 3] };
-// const source2 = { d: 'new value', c: [4, 5] };
+// Example usage for the failing test:
+const result = replica({ con: console.log }, { reg: /hello/ });
+console.log(result);
 
-// const result = replica(target, source1, source2);
-// console.log(result);
+// Expected output:
+// { con: [Function: log], reg: /hello/ }
