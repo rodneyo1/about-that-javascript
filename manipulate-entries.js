@@ -28,18 +28,15 @@ const filterEntries = (obj, fn) => {
     });
   };
   
-  const cartTotal = (cart) => {
-    return mapEntries(cart, ([item, grams]) => {
-      const itemNutrition = nutritionDB[item];
-      const scaledNutrition = Object.fromEntries(
-        Object.entries(itemNutrition).map(([nutrient, value]) => [
-          nutrient,
-          +(value * grams / 100).toFixed(1)
-        ])
-      );
-      return [item, scaledNutrition];
-    });
-  };
+  function cartTotal(cart) {
+    return mapEntries(cart, (item) => {
+        const newObj2 = new Object
+        for (const [key, value] of Object.entries(nutritionDB[item[0]])) {
+            newObj2[key] = Number.parseInt(value * item[1] * 100) / 10000
+        }
+        return [item[0], newObj2]
+    })
+}
   
 //   // Example usage:
 //   const groceriesCart = { orange: 500, oil: 20, sugar: 480 };
