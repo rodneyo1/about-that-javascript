@@ -1,41 +1,27 @@
 // Basic throttle function
-function throttle(func, wait) {
-    let timeout = null;
-    let lastExec = 0;
-  
-    return function (...args) {
-      const context = this;
-      const now = Date.now();
-  
-      if (now - lastExec >= wait) {
-        if (timeout) {
-          clearTimeout(timeout);
-          timeout = null;
+function throttle(func, wait = 0) {
+    let called = false
+    return (...args) => {
+        if (!called) {
+            func(...args)
+            called = true
+            setTimeout(() => called = false, wait)
         }
-        func.apply(context, args);
-        lastExec = now;
-      } else if (!timeout) {
-        timeout = setTimeout(() => {
-          func.apply(context, args);
-          lastExec = Date.now();
-          timeout = null;
-        }, wait);
-      }
-    };
-  }
+    }
+}
   
   
   function opThrottle(func, wait = 0, options = {leading: false, trailing: true}) {
-    if (options["leading"] && options["trailing"]) return throttle(func, wait)
-    let invoked = false
+    if (options["trailing"] && options["leading"]) return throttle(func, wait)
+    let called = false
     let timer
     return (...args) => {
-        if (!invoked) {
+        if (!called) {
             if (options["leading"]) func(...args)
-            invoked = true
+            called = true
             if (options["trailing"]) clearTimeout(timer)
             setTimeout(() => {
-                invoked = false
+                called = false
                 if (options["trailing"]) func(...args)
             }, wait)
         }
