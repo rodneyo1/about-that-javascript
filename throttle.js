@@ -8,17 +8,22 @@ function throttle(func, wait) {
       const now = Date.now();
   
       if (now - lastExec >= wait) {
+        if (timeout) {
+          clearTimeout(timeout);
+          timeout = null;
+        }
         func.apply(context, args);
         lastExec = now;
-      } else {
-        clearTimeout(timeout);
+      } else if (!timeout) {
         timeout = setTimeout(() => {
           func.apply(context, args);
-          lastExec = now;
-        }, wait - (now - lastExec));
+          lastExec = Date.now();
+          timeout = null;
+        }, wait);
       }
     };
   }
+  
   
 //   // Throttle function with options
 //   function opThrottle(func, wait, options = {}) {
