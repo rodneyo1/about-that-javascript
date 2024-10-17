@@ -47,14 +47,18 @@ function throttle(func, wait) {
           clearTimeout(timeout);
           timeout = null;
         }
-        lastExec = now;
-        func.apply(context, args);
+        if (leading || (trailing && lastExec !== 0)) {
+          func.apply(context, args);
+          lastExec = now;
+        } else {
+          lastExec = now;
+        }
       } else if (!timeout && trailing) {
         lastArgs = args;
         timeout = setTimeout(() => {
-          lastExec = leading ? Date.now() : 0;
-          timeout = null;
           func.apply(context, lastArgs);
+          lastExec = now;
+          timeout = null;
         }, remaining);
       }
     };
