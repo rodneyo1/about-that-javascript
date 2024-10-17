@@ -25,41 +25,19 @@ function throttle(func, wait) {
   }
   
   
-  // Throttle function with options
-  function opThrottle(func, wait, options = {}) {
-    let timeout = null;
-    let lastExec = 0;
-    let lastArgs = null;
-    const { leading = true, trailing = true } = options;
-  
-    return function (...args) {
-      const context = this;
-      const now = Date.now();
-  
-      if (!lastExec && !leading) {
-        lastExec = now;
-      }
-  
-      const remaining = wait - (now - lastExec);
-  
-      if (remaining <= 0 || remaining > wait) {
-        if (timeout) {
-          clearTimeout(timeout);
-          timeout = null;
+  function opThrottle(func, wait = 0, options = {leading: false, trailing: true}) {
+    if (options["leading"] && options["trailing"]) return throttle(func, wait)
+    let invoked = false
+    let timer
+    return (...args) => {
+        if (!invoked) {
+            if (options["leading"]) func(...args)
+            invoked = true
+            if (options["trailing"]) clearTimeout(timer)
+            setTimeout(() => {
+                invoked = false
+                if (options["trailing"]) func(...args)
+            }, wait)
         }
-        if (leading || (trailing && lastExec !== 0)) {
-          func.apply(context, args);
-          lastExec = now;
-        } else {
-          lastExec = now;
-        }
-      } else if (!timeout && trailing) {
-        lastArgs = args;
-        timeout = setTimeout(() => {
-          func.apply(context, lastArgs);
-          lastExec = now;
-          timeout = null;
-        }, remaining);
-      }
-    };
-  }
+    }
+}
