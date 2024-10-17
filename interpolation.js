@@ -1,20 +1,24 @@
-function interpolation({ step, start, end, callback, duration }) {
-    const stepSize = (end - start) / step;
-    const delayBetweenSteps = duration / step;
+function interpolation({ step, start, end, duration }) {
+    return new Promise(resolve => {
+      const stepSize = (end - start) / step;
+      const delayBetweenSteps = duration / step;
   
-    function executeStep(currentStep) {
-      if (currentStep >= step) return; // Stop when we reach the number of steps
+      function executeStep(currentStep) {
+        if (currentStep >= step) {
+          resolve([[start + stepSize * (step - 1), duration]]);
+          return;
+        }
   
-      const distance = start + stepSize * currentStep;
-      const point = (duration / step) * currentStep;
-      
-      // Call the callback with the current interpolated point
-      callback([distance, point]);
+        if (currentStep === step - 1) {
+          const distance = start + stepSize * currentStep;
+          const point = duration;
+          resolve([[distance, point]]);
+          return;
+        }
   
-      // next step
-      setTimeout(() => executeStep(currentStep + 1), delayBetweenSteps);
-    }
+        setTimeout(() => executeStep(currentStep + 1), delayBetweenSteps);
+      }
   
-    // Start interpolation
-    executeStep(0);
+      executeStep(0);
+    });
   }
