@@ -1,21 +1,18 @@
-// Retry function
 const retry = (count, callback) => {
     return async (...args) => {
-      let attempts = 0;
-      while (true) {
+      for (let attempt = 0; attempt <= count; attempt++) {
         try {
           return await callback(...args);
         } catch (error) {
-          attempts++;
-          if (attempts > count) {
-            throw new Error(`Failed after ${attempts} attempts`);
+          if (attempt === count) {
+            throw error; // Throw the last error on final attempt
           }
         }
       }
     };
   };
   
-  // Timeout function
+  // Timeout function (unchanged)
   const timeout = (delay, callback) => {
     return async (...args) => {
       const timeoutPromise = new Promise((_, reject) => {
