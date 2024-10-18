@@ -12,7 +12,7 @@ const queryServers = (serverName, q) => {
     const servers = ['web', 'image', 'video'];
     
     const searchPromise = Promise.all(
-    //   servers.map(server => 
+      servers.map(server => 
     //     queryServers(server, q).then(result => [server, result])
     //   )
     ).then(results => 
