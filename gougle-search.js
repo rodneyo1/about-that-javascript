@@ -13,8 +13,8 @@ const queryServers = (serverName, q) => {
     
     const searchPromise = Promise.all(
       servers.map(server => 
-    //     queryServers(server, q).then(result => [server, result])
-    //   )
+        queryServers(server, q).then(result => [server, result])
+      )
     ).then(results => 
       Object.fromEntries(results)
     );
