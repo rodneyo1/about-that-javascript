@@ -2,17 +2,14 @@
  * Executes an array of async functions in series and returns their results in order
  * @param {Array<Function>} funcs - Array of async functions to execute
  * @returns {Promise<Array>} Array of results in the same order as input functions
+ * @throws {Error} If any function throws, the error is propagated
  */
 async function series(funcs) {
     const results = [];
     
     for (const func of funcs) {
-        try {
-            const result = await func();
-            results.push(result);
-        } catch (error) {
-            results.push(error);
-        }
+        const result = await func();
+        results.push(result);
     }
     
     return results;
