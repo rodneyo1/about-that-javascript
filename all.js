@@ -6,7 +6,8 @@ function all(promisesObj) {
     return Promise.resolve({});
   }
 
-  const values = Object.values(promisesObj);
+  // Wrap each value in Promise.resolve to handle both promises and synchronous values
+  const values = keys.map(key => Promise.resolve(promisesObj[key]));
 
   return Promise.all(values).then(resolvedValues => {
     const result = {};
