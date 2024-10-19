@@ -18,22 +18,22 @@ async function series(funcs) {
     return results;
 }
 
-// Example usage:
-async function example() {
-    const funcs = [
-        async () => {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            return 1;
-        },
-        async () => {
-            await new Promise(resolve => setTimeout(resolve, 500));
-            return 2;
-        },
-        async () => {
-            throw new Error('Something went wrong');
-        }
-    ];
+// // Example usage:
+// async function example() {
+//     const funcs = [
+//         async () => {
+//             await new Promise(resolve => setTimeout(resolve, 1000));
+//             return 1;
+//         },
+//         async () => {
+//             await new Promise(resolve => setTimeout(resolve, 500));
+//             return 2;
+//         },
+//         async () => {
+//             throw new Error('Something went wrong');
+//         }
+//     ];
 
-    const results = await series(funcs);
-    console.log(results); // [1, 2, Error: Something went wrong]
-}
+//     const results = await series(funcs);
+//     console.log(results); // [1, 2, Error: Something went wrong]
+// }
