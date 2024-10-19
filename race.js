@@ -17,6 +17,7 @@ async function some(args, count) {
             promise.then((x) => {
                 newArr[i] = x
                 count--
+                
                 if (count <= 0) return res()
             }, (y) => {
                 newArr[i] = y
