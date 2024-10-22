@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import http from 'http';
 import fs from 'fs/promises';
 import path from 'path';
@@ -31,7 +32,7 @@ const server = http.createServer(async (req, res) => {
                 'Content-Type': 'application/json',
                 'WWW-Authenticate': 'Basic realm="Access to guest list"'
             });
-            res.end('Authorization Required');
+            res.end(JSON.stringify({ error: 'Authorization Required' }));
             return;
         }
 
@@ -51,14 +52,17 @@ const server = http.createServer(async (req, res) => {
             const body = Buffer.concat(buffers).toString();
 
             try {
-                // Parse the JSON to validate it and ensure it's properly formatted
+                // Parse the JSON to validate it
                 const guestData = JSON.parse(body);
-                await fs.mkdir('./guests', { recursive: true });
-                const guestFilePath = path.join('./guests', `${guestName}.json`);
                 
-                // Write the formatted JSON to file
-                const formattedJson = JSON.stringify(guestData, null, 2);
-                await fs.writeFile(guestFilePath, formattedJson);
+                // Ensure the guests directory exists
+                const guestDir = path.join('.', 'guests');
+                await fs.mkdir(guestDir, { recursive: true });
+                
+                const guestFilePath = path.join(guestDir, `${guestName}.json`);
+                
+                // Write the formatted JSON to the file
+                await fs.writeFile(guestFilePath, JSON.stringify(guestData, null, 2), 'utf8');
                 
                 // Send response with compact JSON (no formatting)
                 res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -77,6 +81,7 @@ const server = http.createServer(async (req, res) => {
     }
 });
 
+// Start the server
 server.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
