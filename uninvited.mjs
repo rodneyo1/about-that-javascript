@@ -22,23 +22,18 @@ const server = http.createServer(async (req, res) => {
             }
             const body = Buffer.concat(buffers).toString();
 
+            // Store the raw content without JSON validation
             try {
-                // Try to parse JSON
-                const guestData = JSON.parse(body);
-                
-                // Ensure guests directory exists
                 await fs.mkdir('./guests', { recursive: true });
-                
-                // Write guest data to file
                 const guestFilePath = path.join('./guests', `${guestName}.json`);
-                await fs.writeFile(guestFilePath, JSON.stringify(guestData, null, 2));
+                await fs.writeFile(guestFilePath, body);
                 
+                // Always respond with 201 and echo back the content
                 res.writeHead(201, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify(guestData));
-            } catch (parseError) {
-                // If JSON parsing fails, return 400
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ error: 'invalid JSON' }));
+                res.end(body);
+            } catch (writeError) {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'server failed' }));
             }
         } else {
             res.writeHead(405, { 'Content-Type': 'application/json' });
