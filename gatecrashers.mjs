@@ -5,21 +5,18 @@ import path from 'path';
 
 const port = 5000;
 
-// Authentication credentials
 const validUsers = {
     'Caleb_Squires': 'abracadabra',
     'Tyrique_Dalton': 'abracadabra',
     'Rahima_Young': 'abracadabra'
 };
 
-// Function to check authentication
 function authenticateRequest(req) {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Basic ')) {
         return false;
     }
 
-    // Extract credentials from Basic Auth header
     const base64Credentials = authHeader.split(' ')[1];
     const credentials = Buffer.from(base64Credentials, 'base64').toString('utf-8');
     const [username, password] = credentials.split(':');
@@ -29,7 +26,6 @@ function authenticateRequest(req) {
 
 const server = http.createServer(async (req, res) => {
     try {
-        // Check authentication first
         if (!authenticateRequest(req)) {
             res.writeHead(401, { 
                 'Content-Type': 'application/json',
@@ -55,13 +51,19 @@ const server = http.createServer(async (req, res) => {
             const body = Buffer.concat(buffers).toString();
 
             try {
+                // Parse the JSON to validate it and ensure it's properly formatted
+                const guestData = JSON.parse(body);
                 await fs.mkdir('./guests', { recursive: true });
                 const guestFilePath = path.join('./guests', `${guestName}.json`);
-                await fs.writeFile(guestFilePath, body);
                 
+                // Write the formatted JSON to file
+                const formattedJson = JSON.stringify(guestData, null, 2);
+                await fs.writeFile(guestFilePath, formattedJson);
+                
+                // Send response with compact JSON (no formatting)
                 res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(body);
-            } catch (writeError) {
+                res.end(JSON.stringify(guestData));
+            } catch (err) {
                 res.writeHead(500, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ error: 'server failed' }));
             }
