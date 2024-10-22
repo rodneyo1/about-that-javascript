@@ -30,7 +30,7 @@ const main = async () => {
         })
     );
 
-    // Filter out null values and sort guests by last name and then by first name
+    // Filter out null values and sort guests
     const filteredGuests = guests.filter(guest => guest !== null);
     filteredGuests.sort((a, b) => {
       if (a.lastname === b.lastname) {
@@ -39,14 +39,15 @@ const main = async () => {
       return a.lastname.localeCompare(b.lastname);
     });
 
-    // Create the VIP list in the format required
+    // Create the VIP list in the desired format
     const output = filteredGuests.map((guest, index) => `${index + 1}. ${guest.lastname} ${guest.firstname}`).join('\n');
 
     // Save the VIP list to vip.txt
-    await fs.writeFile(path.join(dirPath, 'vip.txt'), output);
+   
+    await fs.writeFile( 'vip.txt', output);
 
     // Print the guests in the desired format
-    console.log(output);
+    console.log("Vip.txt created successfully");
   } catch (err) {
     console.error("Error reading directory:", err.message);
   }
