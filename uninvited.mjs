@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
+import http from 'http';
 import fs from 'fs/promises';
 import path from 'path';
-import http from 'http';
 
 const port = 5000;
 
@@ -29,6 +29,13 @@ const server = http.createServer(async (req, res) => {
 
       req.on('end', async () => {
         try {
+          // Check if body is valid JSON
+          if (!isValidJson(body)) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'invalid JSON' }));
+            return;
+          }
+
           // Parse the JSON body
           const guestData = JSON.parse(body);
 
@@ -57,6 +64,16 @@ const server = http.createServer(async (req, res) => {
     res.end(JSON.stringify({ error: 'server failed' }));
   }
 });
+
+// Function to validate JSON
+const isValidJson = (str) => {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 
 // Start server
 server.listen(port, () => {
