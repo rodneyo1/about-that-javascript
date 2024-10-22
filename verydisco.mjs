@@ -24,7 +24,7 @@ function veryDiscoArgument(argument) {
 if (argv.length > 2) {
   const argument = argv[2];
   const veryDiscoResult = veryDiscoArgument(argument);
-  console.log(veryDiscoResult, " ()");
+  console.log(veryDiscoResult);
 } else {
   console.error("Please provide an argument to make very disco!");
 }
