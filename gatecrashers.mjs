@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 import http from 'http';
 import fs from 'fs/promises';
 import path from 'path';
@@ -32,7 +31,7 @@ const server = http.createServer(async (req, res) => {
                 'Content-Type': 'application/json',
                 'WWW-Authenticate': 'Basic realm="Access to guest list"'
             });
-            res.end(JSON.stringify({ error: 'Authorization Required' }));
+            res.end('Authorization Required');
             return;
         }
 
@@ -52,17 +51,17 @@ const server = http.createServer(async (req, res) => {
             const body = Buffer.concat(buffers).toString();
 
             try {
-                // Parse the JSON to validate it
+                // Parse the JSON to validate it and ensure it's properly formatted
                 const guestData = JSON.parse(body);
                 
-                // Ensure the guests directory exists
-                const guestDir = path.join('.', 'guests');
+                // Use process.env.GUEST_PATH if set, otherwise default to './guests'
+                const guestDir = process.env.GUEST_PATH || './guests';
                 await fs.mkdir(guestDir, { recursive: true });
-                
                 const guestFilePath = path.join(guestDir, `${guestName}.json`);
                 
-                // Write the formatted JSON to the file
-                await fs.writeFile(guestFilePath, JSON.stringify(guestData, null, 2), 'utf8');
+                // Write the formatted JSON to file
+                const formattedJson = JSON.stringify(guestData, null, 2);
+                await fs.writeFile(guestFilePath, formattedJson);
                 
                 // Send response with compact JSON (no formatting)
                 res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -81,7 +80,11 @@ const server = http.createServer(async (req, res) => {
     }
 });
 
-// Start the server
-server.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-});
+// Export the server for testing
+export default server;
+
+if (process.env.NODE_ENV !== 'test') {
+    server.listen(port, () => {
+        console.log(`Server listening on port ${port}`);
+    });
+}
