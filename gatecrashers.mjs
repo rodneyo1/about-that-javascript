@@ -5,6 +5,9 @@ import path from 'path';
 
 const port = 5000;
 
+// Get the guest directory path from command line arguments or environment
+const guestDir = process.argv[2] || './guests';
+
 const validUsers = {
     'Caleb_Squires': 'abracadabra',
     'Tyrique_Dalton': 'abracadabra',
@@ -24,67 +27,69 @@ function authenticateRequest(req) {
     return validUsers[username] === password;
 }
 
-const server = http.createServer(async (req, res) => {
-    try {
-        if (!authenticateRequest(req)) {
-            res.writeHead(401, { 
-                'Content-Type': 'application/json',
-                'WWW-Authenticate': 'Basic realm="Access to guest list"'
-            });
-            res.end('Authorization Required');
-            return;
-        }
-
-        if (req.method === 'POST') {
-            const guestName = path.basename(req.url);
-            if (!guestName || guestName === '/') {
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ error: 'guest name is required' }));
+const createServer = (customGuestDir) => {
+    const targetDir = customGuestDir || guestDir;
+    
+    return http.createServer(async (req, res) => {
+        try {
+            if (!authenticateRequest(req)) {
+                res.writeHead(401, { 
+                    'Content-Type': 'application/json',
+                    'WWW-Authenticate': 'Basic realm="Access to guest list"'
+                });
+                res.end('Authorization Required');
                 return;
             }
 
-            // Collect the request body
-            const buffers = [];
-            for await (const chunk of req) {
-                buffers.push(chunk);
-            }
-            const body = Buffer.concat(buffers).toString();
+            if (req.method === 'POST') {
+                const guestName = path.basename(req.url);
+                if (!guestName || guestName === '/') {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'guest name is required' }));
+                    return;
+                }
 
-            try {
-                // Parse the JSON to validate it and ensure it's properly formatted
-                const guestData = JSON.parse(body);
-                
-                // Use process.env.GUEST_PATH if set, otherwise default to './guests'
-                const guestDir = process.env.GUEST_PATH || './guests';
-                await fs.mkdir(guestDir, { recursive: true });
-                const guestFilePath = path.join(guestDir, `${guestName}.json`);
-                
-                // Write the formatted JSON to file
-                const formattedJson = JSON.stringify(guestData, null, 2);
-                await fs.writeFile(guestFilePath, formattedJson);
-                
-                // Send response with compact JSON (no formatting)
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify(guestData));
-            } catch (err) {
-                res.writeHead(500, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ error: 'server failed' }));
+                // Collect the request body
+                const buffers = [];
+                for await (const chunk of req) {
+                    buffers.push(chunk);
+                }
+                const body = Buffer.concat(buffers).toString();
+
+                try {
+                    // Parse the JSON to validate it
+                    const guestData = JSON.parse(body);
+                    
+                    // Create directory if it doesn't exist
+                    await fs.mkdir(targetDir, { recursive: true });
+                    const guestFilePath = path.join(targetDir, `${guestName}.json`);
+                    
+                    // Write the formatted JSON to file
+                    await fs.writeFile(guestFilePath, JSON.stringify(guestData, null, 2));
+                    
+                    // Send response
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify(guestData));
+                } catch (err) {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'server failed' }));
+                }
+            } else {
+                res.writeHead(405, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'method not allowed' }));
             }
-        } else {
-            res.writeHead(405, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'method not allowed' }));
+        } catch (err) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'server failed' }));
         }
-    } catch (err) {
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'server failed' }));
-    }
-});
-
-// Export the server for testing
-export default server;
+    });
+};
 
 if (process.env.NODE_ENV !== 'test') {
+    const server = createServer();
     server.listen(port, () => {
         console.log(`Server listening on port ${port}`);
     });
 }
+
+export default createServer;
