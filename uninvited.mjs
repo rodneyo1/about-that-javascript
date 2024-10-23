@@ -20,6 +20,12 @@ const parseBasicAuth = (authHeader) => {
     return { username, password };
 };
 
+const isAuthenticated = (credentials) => {
+    if (!credentials || !credentials.username || !credentials.password) return false;
+    const validPassword = authorizedUsers[credentials.username];
+    return validPassword && validPassword === credentials.password;
+};
+
 const server = http.createServer(async (req, res) => {
     try {
         // Handle only POST requests
@@ -35,7 +41,7 @@ const server = http.createServer(async (req, res) => {
             const authHeader = req.headers['authorization'];
             const credentials = parseBasicAuth(authHeader);
 
-            if (!credentials || !authorizedUsers[credentials.username] || authorizedUsers[credentials.username] !== credentials.password) {
+            if (!isAuthenticated(credentials)) {
                 res.writeHead(401, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ error: 'Authorization Required' }));
                 return;
