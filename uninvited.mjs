@@ -1,82 +1,54 @@
-#!/usr/bin/env node
 import http from 'http';
-import fs from 'fs/promises';
-import path from 'path';
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
 
-// Port and authorized users setup
-const port = 5000;
-const authorizedUsers = {
-    'Caleb_Squires': 'abracadabra',
-    'Tyrique_Dalton': 'abracadabra',
-    'Rahima_Young': 'abracadabra',
-};
+const PORT = 5000;
+const GUESTS_DIR = 'guests';
 
-// Utility function to parse basic authentication header
-const parseBasicAuth = (authHeader) => {
-    if (!authHeader || !authHeader.startsWith('Basic ')) return null;
-    const base64Credentials = authHeader.split(' ')[1]; // "Basic <base64encoded>"
-    const credentials = Buffer.from(base64Credentials, 'base64').toString('utf8');
-    const [username, password] = credentials.split(':');
-    return { username, password };
-};
+const server = http.createServer((req, res) => {
+    res.setHeader('Content-Type', 'application/json');
 
-// Function to validate the credentials
-const isAuthenticated = (credentials) => {
-    if (!credentials || !credentials.username || !credentials.password) return false;
-    const validPassword = authorizedUsers[credentials.username];
-    return validPassword && validPassword === credentials.password;
-};
-
-const server = http.createServer(async (req, res) => {
-    // Step 1: Authenticate before anything else
-    const authHeader = req.headers['authorization'];
-    const credentials = parseBasicAuth(authHeader);
-
-    if (!isAuthenticated(credentials)) {
-        // If authentication fails, immediately respond with 401 and stop further processing
-        res.writeHead(401, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Authorization Required' }));
-        return;
-    }
-
-    // Step 2: Proceed with other operations only if authenticated
     if (req.method === 'POST') {
-        const guestName = path.basename(req.url);
-        if (!guestName || guestName === '/') {
-            res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'guest name is required' }));
-            return;
-        }
+        let body = '';
 
-        try {
-            // Collect the request body
-            const buffers = [];
-            for await (const chunk of req) {
-                buffers.push(chunk);
+        req.on('data', chunk => {
+            body += chunk.toString();
+        });
+
+        req.on('end', async () => {
+            try {
+                const guestName = req.url.slice(1);
+
+                // Validate guest name
+                if (!guestName) {
+                    res.writeHead(400);
+                    res.end(JSON.stringify({ error: 'guest name is required' }));
+                    return;
+                }
+
+                // Ensure the guests directory exists
+                await mkdir(GUESTS_DIR, { recursive: true });
+
+                // Write guest data to file
+                const guestFile = join(GUESTS_DIR, `${guestName}.json`);
+                await writeFile(guestFile, body);
+
+                // Respond with the stored content and 201 status
+                res.writeHead(201);
+                res.end(body);
+            } catch (err) {
+                // Respond with server error if something goes wrong
+                res.writeHead(500);
+                res.end(JSON.stringify({ error: 'server failed' }));
             }
-            const body = Buffer.concat(buffers).toString();
-
-            // Create or overwrite guest file
-            await fs.mkdir('./guests', { recursive: true });
-            const guestFilePath = path.join('./guests', `${guestName}.json`);
-            await fs.writeFile(guestFilePath, body);
-
-            // Respond with 200 and echo back the content
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(body);
-        } catch (writeError) {
-            // Handle server error during file operations
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'server failed' }));
-        }
+        });
     } else {
-        // Handle other HTTP methods with 405 error
-        res.writeHead(405, { 'Content-Type': 'application/json' });
+        // Method not allowed for non-POST requests
+        res.writeHead(405);
         res.end(JSON.stringify({ error: 'method not allowed' }));
     }
 });
 
-// Start the server
-server.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
+server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
