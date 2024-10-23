@@ -1,54 +1,43 @@
-import http from 'http';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
+import http from 'http'
+import { promises as fs } from 'fs'
+import path from 'path'
 
-const PORT = 5000;
-const GUESTS_DIR = 'guests';
+const port = 5000
 
-const server = http.createServer((req, res) => {
-    res.setHeader('Content-Type', 'application/json');
+const server = http.createServer(async (req, res) => {
+  try {
+    res.setHeader('Content-Type', 'application/json')
 
     if (req.method === 'POST') {
-        let body = '';
+      const guestName = req.url.slice(1)
+      const filePath = path.join('./guests', `${guestName}.json`)
 
-        req.on('data', chunk => {
-            body += chunk.toString();
-        });
+      let body = ''
+      req.on('data', (chunk) => {
+        body += chunk.toString()
+      })
 
-        req.on('end', async () => {
-            try {
-                const guestName = req.url.slice(1);
+      req.on('end', async () => {
+        try {
+          await fs.writeFile(filePath, body, 'utf8')
 
-                // Validate guest name
-                if (!guestName) {
-                    res.writeHead(400);
-                    res.end(JSON.stringify({ error: 'guest name is required' }));
-                    return;
-                }
-
-                // Ensure the guests directory exists
-                await mkdir(GUESTS_DIR, { recursive: true });
-
-                // Write guest data to file
-                const guestFile = join(GUESTS_DIR, `${guestName}.json`);
-                await writeFile(guestFile, body);
-
-                // Respond with the stored content and 201 status
-                res.writeHead(201);
-                res.end(body);
-            } catch (err) {
-                // Respond with server error if something goes wrong
-                res.writeHead(500);
-                res.end(JSON.stringify({ error: 'server failed' }));
-            }
-        });
+          res.writeHead(201)
+          res.end(body)
+        } catch (err) {
+          res.writeHead(500)
+          res.end(JSON.stringify({ error: 'server failed' }))
+        }
+      })
     } else {
-        // Method not allowed for non-POST requests
-        res.writeHead(405);
-        res.end(JSON.stringify({ error: 'method not allowed' }));
+      res.writeHead(500)
+      res.end(JSON.stringify({ error: 'server failed' }))
     }
-});
+  } catch (err) {
+    res.writeHead(500)
+    res.end(JSON.stringify({ error: 'server failed' }))
+  }
+})
 
-server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`)
+})
