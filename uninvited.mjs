@@ -1,44 +1,47 @@
-import http from 'http'
-import { promises as fs } from 'fs'
-import path from 'path'
+import fs from "fs/promises";
+import http from "http";
+import path from "path";
 
-//create port
-const port = 5000
+const PORT = 5000;
 
 const server = http.createServer(async (req, res) => {
-  try {
-    res.setHeader('Content-Type', 'application/json')
+  res.setHeader("Content-Type", "application/json");
 
-    if (req.method === 'POST') {
-      const guestName = req.url.slice(1)
-      const filePath = path.join('./guests', `${guestName}.json`)
+  if (req.method === "POST") {
+    try {
+      const guestName = path.basename(
+        new URL(req.url, `http://${req.headers.host}`).pathname
+      );
 
-      let body = ''
-      req.on('data', (chunk) => {
-        body += chunk.toString()
-      })
+      if (!guestName) {
+        throw new Error("URLmissing in the guest name.");
+      }
 
-      req.on('end', async () => {
-        try {
-          await fs.writeFile(filePath, body, 'utf8')
+      let body = "";
+      for await (const chunk of req) {
+        body += chunk.toString();
+      }
 
-          res.writeHead(201)
-          res.end(body)
-        } catch (err) {
-          res.writeHead(500)
-          res.end(JSON.stringify({ error: 'server failed' }))
-        }
-      })
-    } else {
-      res.writeHead(500)
-      res.end(JSON.stringify({ error: 'server failed' }))
+      const fileName = `${guestName}.json`;
+      const filePath = path.join(process.cwd(), "guests", fileName);
+
+      await fs.mkdir(path.dirname(filePath), { recursive: true });
+      await fs.writeFile(filePath, body);
+
+      res.statusCode = 201;
+      res.end(body);
+    } catch (error) {
+      console.error("internal server error:", error);
+      res.statusCode = 500;
+      res.end(JSON.stringify({ error: "internal server error" }));
     }
-  } catch (err) {
-    res.writeHead(500)
-    res.end(JSON.stringify({ error: 'server failed' }))
+  } else {
+    res.statusCode = 405;
+    res.end(JSON.stringify({ error: "method not allowed" }));
   }
-})
+});
 
-server.listen(port, () => {
-  console.log(`Server listening on port ${port}`)
+server.listen(PORT, () => {
+    console.log(`listening on port ${PORT}`);
 })
+export { server };
