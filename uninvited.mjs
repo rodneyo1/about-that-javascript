@@ -1,47 +1,37 @@
-import fs from "fs/promises";
-import http from "http";
-import path from "path";
 
-const PORT = 5000;
+import fs from 'fs/promises';
+import http from 'http';
 
-const server = http.createServer(async (req, res) => {
-  res.setHeader("Content-Type", "application/json");
+const port = 5000;
+const directoryPath = './guests/';
 
-  if (req.method === "POST") {
-    try {
-      const guestName = path.basename(
-        new URL(req.url, `http://${req.headers.host}`).pathname
-      );
+const server = http.createServer((req, res) => {
+  if (req.method === 'POST') {
+    let body = '';
 
-      if (!guestName) {
-        throw new Error("URLmissing in the guest name.");
+    req.on('data', (chunk) => {
+      body += chunk.toString();
+    });
+
+    req.on('end', async () => {
+      const fileName = req.url.slice(1) + '.json';
+
+      try {
+        await fs.writeFile(directoryPath + fileName, body, { flag: 'w' });
+        res.writeHead(201, { 'Content-Type': 'application/json' });
+        res.end(body);
+      } catch (error) {
+        console.error(error);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'server failed' }));
       }
-
-      let body = "";
-      for await (const chunk of req) {
-        body += chunk.toString();
-      }
-
-      const fileName = `${guestName}.json`;
-      const filePath = path.join(process.cwd(), "guests", fileName);
-
-      await fs.mkdir(path.dirname(filePath), { recursive: true });
-      await fs.writeFile(filePath, body);
-
-      res.statusCode = 201;
-      res.end(body);
-    } catch (error) {
-      console.error("internal server error:", error);
-      res.statusCode = 500;
-      res.end(JSON.stringify({ error: "internal server error" }));
-    }
+    });
   } else {
-    res.statusCode = 405;
-    res.end(JSON.stringify({ error: "method not allowed" }));
+    res.writeHead(404, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'page not found' }));
   }
 });
 
-server.listen(PORT, () => {
-    console.log(`listening on port ${PORT}`);
-})
-export { server };
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
