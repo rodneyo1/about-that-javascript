@@ -70,14 +70,11 @@ async function handleRequest(req, res) {
     }
 }
 
-if (process.env.NODE_ENV !== 'test') {
+// Only start the server if this file is being run directly
+if (import.meta.url === `file://${process.argv[1]}`) {
     server.listen(port, () => {
         console.log(`Server listening on port ${port}`);
     });
 }
-
-server.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-});
 
 export default server;
