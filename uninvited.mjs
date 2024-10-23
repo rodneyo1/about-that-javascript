@@ -3,49 +3,44 @@ import http from 'http';
 import fs from 'fs/promises';
 import path from 'path';
 
+// Port and authorized users setup
 const port = 5000;
 const authorizedUsers = {
     'Caleb_Squires': 'abracadabra',
     'Tyrique_Dalton': 'abracadabra',
-    'Rahima_Young': 'abracadabra'
+    'Rahima_Young': 'abracadabra',
 };
 
-const isAuthorized = (req) => {
-    try {
-        // If no authorization header, fail
-        if (!req.headers.authorization) return false;
+// Utility function to parse basic authentication header
+const parseBasicAuth = (authHeader) => {
+    if (!authHeader || !authHeader.startsWith('Basic ')) return null;
+    const base64Credentials = authHeader.split(' ')[1]; // "Basic <base64encoded>"
+    const credentials = Buffer.from(base64Credentials, 'base64').toString('utf8');
+    const [username, password] = credentials.split(':');
+    return { username, password };
+};
 
-        // Get the base64 credentials
-        const base64Credentials = req.headers.authorization.split(' ')[1];
-        if (!base64Credentials) return false;
-
-        // Decode and split credentials
-        const credentials = Buffer.from(base64Credentials, 'base64').toString();
-        const [username, password] = credentials.split(':');
-
-        // Check if user exists and password matches
-        return authorizedUsers[username] === password;
-    } catch {
-        return false;
-    }
+// Function to validate the credentials
+const isAuthenticated = (credentials) => {
+    if (!credentials || !credentials.username || !credentials.password) return false;
+    const validPassword = authorizedUsers[credentials.username];
+    return validPassword && validPassword === credentials.password;
 };
 
 const server = http.createServer(async (req, res) => {
-    // First check: Only allow POST method
-    if (req.method !== 'POST') {
-        res.writeHead(405, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'method not allowed' }));
-        return;
-    }
+    // Step 1: Authenticate before anything else
+    const authHeader = req.headers['authorization'];
+    const credentials = parseBasicAuth(authHeader);
 
-    // Second check: Require valid authorization
-    if (!isAuthorized(req)) {
+    if (!isAuthenticated(credentials)) {
+        // If authentication fails, immediately respond with 401 and stop further processing
         res.writeHead(401, { 'Content-Type': 'application/json' });
-        res.end('Authorization Required');
+        res.end(JSON.stringify({ error: 'Authorization Required' }));
         return;
     }
 
-    try {
+    // Step 2: Proceed with other operations only if authenticated
+    if (req.method === 'POST') {
         const guestName = path.basename(req.url);
         if (!guestName || guestName === '/') {
             res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -53,26 +48,35 @@ const server = http.createServer(async (req, res) => {
             return;
         }
 
-        // Collect request body
-        const buffers = [];
-        for await (const chunk of req) {
-            buffers.push(chunk);
-        }
-        const body = Buffer.concat(buffers).toString();
+        try {
+            // Collect the request body
+            const buffers = [];
+            for await (const chunk of req) {
+                buffers.push(chunk);
+            }
+            const body = Buffer.concat(buffers).toString();
 
-        // Create or overwrite guest file
-        await fs.mkdir('./guests', { recursive: true });
-        const guestFilePath = path.join('./guests', `${guestName}.json`);
-        await fs.writeFile(guestFilePath, body);
-        
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(body);
-    } catch (err) {
-        res.writeHead(401, { 'Content-Type': 'application/json' });
-        res.end('Authorization Required');
+            // Create or overwrite guest file
+            await fs.mkdir('./guests', { recursive: true });
+            const guestFilePath = path.join('./guests', `${guestName}.json`);
+            await fs.writeFile(guestFilePath, body);
+
+            // Respond with 200 and echo back the content
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(body);
+        } catch (writeError) {
+            // Handle server error during file operations
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'server failed' }));
+        }
+    } else {
+        // Handle other HTTP methods with 405 error
+        res.writeHead(405, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'method not allowed' }));
     }
 });
 
+// Start the server
 server.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
