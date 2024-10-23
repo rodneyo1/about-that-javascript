@@ -2,6 +2,7 @@ import http from 'http'
 import { promises as fs } from 'fs'
 import path from 'path'
 
+//create port
 const port = 5000
 
 const server = http.createServer(async (req, res) => {
