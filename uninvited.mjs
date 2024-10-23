@@ -11,12 +11,9 @@ const authorizedUsers = {
 };
 
 const parseBasicAuth = (authHeader) => {
+    if (!authHeader) return null;
     try {
-        if (!authHeader || !authHeader.startsWith('Basic ')) return null;
-        const base64Credentials = authHeader.split(' ')[1];
-        const credentials = Buffer.from(base64Credentials, 'base64').toString('utf8');
-        const [username, password] = credentials.split(':');
-        if (!username || !password) return null;
+        const [username, password] = Buffer.from(authHeader, 'base64').toString().split(':');
         return { username, password };
     } catch (error) {
         return null;
@@ -34,7 +31,7 @@ const server = http.createServer(async (req, res) => {
             }
 
             // Check authorization
-            const authHeader = req.headers['authorization'];
+            const authHeader = req.headers.authorization?.split(' ')[1];
             const credentials = parseBasicAuth(authHeader);
             
             if (!credentials || 
@@ -70,8 +67,8 @@ const server = http.createServer(async (req, res) => {
             res.end(JSON.stringify({ error: 'method not allowed' }));
         }
     } catch (err) {
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'server failed' }));
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end('Authorization Required');
     }
 });
 
